@@ -1,4 +1,8 @@
-const Header = () => {
+type HeaderProps = {
+    setShow: (show: boolean) => void;
+};
+
+const Header = ({ setShow }: HeaderProps) => {
     return (
         <div className="bg-[#212223] shadow-md">
             <div className="w-[93%] m-auto py-3">
@@ -12,6 +16,7 @@ const Header = () => {
                     </div>
                     <div className='flex gap-4'>
                         <button
+                            onClick={ () => setShow( true ) }
                             className='py-2 w-[80px] text-center bg-teal-700 text-white transition-all hover:bg-teal-500 rounded-[5px] font-medium'>SingIn
                         </button>
                         <button
