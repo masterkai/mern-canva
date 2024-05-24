@@ -27,3 +27,4 @@ const CreateDesign = () => {
 };
 
 export default CreateDesign;
+CreateDesign.displayName = "CreateDesign";
