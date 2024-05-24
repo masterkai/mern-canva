@@ -5,6 +5,7 @@ import LogInModal from "../components/LogInModal";
 
 
 const MyComponent = () => {
+    const [type, setType] = useState('')
     const [show, setShow] = useState( false );
     const [state, setState] = useState( {
         name: '',
@@ -23,8 +24,8 @@ const MyComponent = () => {
 
     return (
         <div className='bg-[#18191b] min-h-screen w-full'>
-            <LogInModal show={ show } setShow={ setShow } inputHandle={ inputHandle } state={ state }/>
-            <Header setShow={ setShow }/>
+            <LogInModal type={type} show={ show } setShow={ setShow } inputHandle={ inputHandle } state={ state }/>
+            <Header setShow={ setShow } setType={setType}/>
             <Hero/>
         </div>
     );
