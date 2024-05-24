@@ -1,15 +1,30 @@
 import Header from "../components/Header";
 import Hero from "../components/Hero";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import LogInModal from "../components/LogInModal";
 
 
 const MyComponent = () => {
     const [show, setShow] = useState( false );
+    const [state, setState] = useState( {
+        name: '',
+        email: '',
+        password: ''
+    } )
+    console.log( state )
+
+    // inputHandler function accept the event object from form input element and then set the state
+    const inputHandle = (e: ChangeEvent<HTMLInputElement>) => {
+        setState( {
+            ...state,
+            [e.target.name]: e.target.value
+        } )
+    }
+
     return (
         <div className='bg-[#18191b] min-h-screen w-full'>
-            <LogInModal show={ show } setShow={ setShow }/>
-            <Header setShow={setShow}/>
+            <LogInModal show={ show } setShow={ setShow } inputHandle={ inputHandle } state={ state }/>
+            <Header setShow={ setShow }/>
             <Hero/>
         </div>
     );
