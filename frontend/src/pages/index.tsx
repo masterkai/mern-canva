@@ -26,7 +26,7 @@ const MyComponent = () => {
         <div className='bg-[#18191b] min-h-screen w-full'>
             <LogInModal type={type} show={ show } setShow={ setShow } inputHandle={ inputHandle } state={ state }/>
             <Header setShow={ setShow } setType={setType}/>
-            <Hero/>
+            <Hero setType={setType} setShow={setShow}/>
         </div>
     );
 };

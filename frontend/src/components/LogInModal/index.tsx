@@ -16,13 +16,14 @@ type LogInModalProps = {
 };
 
 const LogInModal = ({ show, setShow, inputHandle, state, type }: LogInModalProps) => {
+    const displayStr = type === 'signin' ? 'Login' : 'Sign up';
     return (
         <div
             className={ `w-screen ${ show ? 'visible opacity-100' : 'invisible opacity-30' } transition-all duration-500 h-screen fixed bg-[#252627ad] flex justify-center items-center ` }>
             <div className='w-[350px] bg-[#323335] m-auto px-6 py-4 rounded-md relative'>
                 <div onClick={ () => setShow( false ) }
                      className='absolute right-4 top-4 text-xl cursor-pointer text-white'><RxCross2/></div>
-                <h2 className='text-white pb-4 text-center text-xl'>Login and Sign up in seconds</h2>
+                <h2 className='text-white pb-4 text-center text-xl'>{displayStr} in seconds</h2>
                 <form>
                     { type === 'signup' && (
                         <div className='flex flex-col gap-3 mb-3 text-white'>
@@ -48,7 +49,7 @@ const LogInModal = ({ show, setShow, inputHandle, state, type }: LogInModalProps
 
                     <div>
                         <button
-                            className='px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white'>Singin
+                            className='px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white'>{displayStr}
                         </button>
                     </div>
 
@@ -62,7 +63,7 @@ const LogInModal = ({ show, setShow, inputHandle, state, type }: LogInModalProps
                         <button
                             className='px-3 flex justify-center items-center gap-2 py-2 rounded-md bg-red-500 w-full outline-none hover:bg-red-600 text-white'>
                             <span><BiLogoGmail/></span>
-                            <span>Login with Gmail </span>
+                            <span>{displayStr} with Gmail </span>
                         </button>
                     </div>
 
@@ -70,7 +71,7 @@ const LogInModal = ({ show, setShow, inputHandle, state, type }: LogInModalProps
                         <button
                             className='px-3 flex justify-center items-center gap-2 py-2 rounded-md bg-blue-500 w-full outline-none hover:bg-blue-600 text-white'>
                             <span><FaFacebook/></span>
-                            <span>Login with Facebook </span>
+                            <span>{displayStr} with Facebook </span>
                         </button>
                     </div>
 
