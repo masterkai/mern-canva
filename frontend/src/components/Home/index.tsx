@@ -1,15 +1,27 @@
 import { ChangeEvent, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 
 const Home = () => {
+	const navigate = useNavigate();
 	const [show, setShow] = useState(false);
 	const [state, setState] = useState({
 		width: 0,
 		height: 0,
 	});
+
+	const create = () => {
+		const { width, height } = state;
+		navigate("/design/create", {
+			state: {
+				type: "create",
+				width,
+				height,
+			},
+		});
+	};
 
 	const inputHandle = (e: ChangeEvent<HTMLInputElement>) => {
 		setState({
@@ -47,7 +59,7 @@ const Home = () => {
 					Custom Size
 				</button>
 
-				{show && <SizeSetting inputHandler={inputHandle} />}
+				{show && <SizeSetting create={create} inputHandler={inputHandle} />}
 
 				<div>
 					<h2 className="text-3xl pb-10 pt-6 font-semibold text-white">
@@ -83,7 +95,7 @@ export default Home;
 const Item = () => {
 	return (
 		<div className="relative group w-full h-[170px] px-2">
-			<Link to={''} className="w-full h-full block bg-slate-100 p-4 rounded-md">
+			<Link to={""} className="w-full h-full block bg-slate-100 p-4 rounded-md">
 				<img
 					className="w-full h-full rounded-md overflow-hidden"
 					src="http://localhost:5173/canva.png"
@@ -99,8 +111,9 @@ const Item = () => {
 
 type SizeSettingProps = {
 	inputHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+	create: () => void;
 };
-const SizeSetting = ({ inputHandler }: SizeSettingProps) => {
+const SizeSetting = ({ inputHandler, create }: SizeSettingProps) => {
 	return (
 		<form className="absolute top-16 right-3 gap-3 bg-[#252627] w-[250px] p-4 text-white">
 			<div className="grid grid-cols-2 pb-4 gap-3">
@@ -127,7 +140,10 @@ const SizeSetting = ({ inputHandler }: SizeSettingProps) => {
 				</div>
 			</div>
 
-			<button className="px-4 py-2 text-[15px] overflow-hidden text-center bg-[#32769ead] text-white rounded-[3px] font-medium hover:bg-[#1e830f] w-full">
+			<button
+				onClick={create}
+				className="px-4 py-2 text-[15px] overflow-hidden text-center bg-[#32769ead] text-white rounded-[3px] font-medium hover:bg-[#1e830f] w-full"
+			>
 				Create New Design
 			</button>
 		</form>
