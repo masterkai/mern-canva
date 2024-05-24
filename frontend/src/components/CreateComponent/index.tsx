@@ -41,3 +41,4 @@ const CreateComponent = ({ info, current_component }: ICreateComponent) => {
 };
 
 export default CreateComponent;
+CreateComponent.displayName = "CreateComponent";
