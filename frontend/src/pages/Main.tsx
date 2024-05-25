@@ -126,7 +126,7 @@ const Drawer_Box = ({ show, setShow }: DrawerBoxProps) => {
 			<div
 				className={`${
 					show.status ? "p-0 -left-[350px]" : "px-8 left-[75px] py-5"
-				} bg-[#252627] h-full fixed transition-all w-[350px] z-30 duration-700`}
+				} bg-[#252627] h-full fixed transition-all w-[350px] z-30 duration-350`}
 			>
 				<div
 					onClick={() => setShow({ name: "", status: true })}
