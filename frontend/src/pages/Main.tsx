@@ -10,6 +10,8 @@ import { useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import TemplateDesign from "../components/main/TemplateDesign";
 import MyImages from "../components/MyImages";
+import Projects from "../components/Projects";
+import Image from "../components/Image";
 
 const Main = () => {
 	const [state, setState] = useState("");
@@ -168,10 +170,37 @@ const Drawer_Box = ({ state, show, setShow }: DrawerBoxProps) => {
 					</div>
 				)}
 				{state === "image" && <MyImages />}
-				{state === "text" && <div>text</div>}
-				{state === "project" && <div>project</div>}
-				{state === "initImage" && <div>initImage</div>}
-				{state === "background" && <div>background</div>}
+				{state === "text" && (
+					<div className="grid grid-cols-1 gap-2">
+						<div className="bg-[#3c3c3d] cursor-pointer font-bold p-3 text-white text-xl rounded-sm">
+							<h2>Add A Text </h2>
+						</div>
+					</div>
+				)}
+				{state === "project" && <Projects />}
+				{state === "initImage" && (
+					<div className="h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide">
+						<Image />
+					</div>
+				)}
+				{state === "background" && (
+					<div className="h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide">
+						<div className="grid grid-cols-2 gap-2">
+							{[1, 2, 3, 4, 5, 6].map((img, i) => (
+								<div
+									key={i}
+									className="w-full h-[90px] overflow-hidden rounded-sm cursor-pointer"
+								>
+									<img
+										className="w-full h-full object-fill"
+										src="http://localhost:5173/canva.png"
+										alt=""
+									/>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
