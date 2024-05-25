@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from "../components/Header_login";
 import Hero from "../components/Hero";
 import { ChangeEvent, useState } from "react";
 import LogInModal from "../components/LogInModal";
