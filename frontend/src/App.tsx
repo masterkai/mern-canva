@@ -23,9 +23,9 @@ function App() {
 			element: <CreateDesign />,
 		},
 		{
-			path: '/design/:id/edit',
+			path: "/design/:id/edit",
 			element: <Main />,
-		}
+		},
 	]);
 
 	return <RouterProvider router={router} />;
