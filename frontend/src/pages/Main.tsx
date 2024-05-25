@@ -8,7 +8,8 @@ import { BsImages } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import TemplateDesign from '../components/main/TemplateDesign';
+import TemplateDesign from "../components/main/TemplateDesign";
+import MyImages from "../components/MyImages";
 
 const Main = () => {
 	const [state, setState] = useState("");
@@ -47,7 +48,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 		<div className="w-[80px] bg-[#18191B] z-50 h-full text-gray-400 overflow-y-auto">
 			<div
 				onClick={() => setElements("design", "design")}
-				className={` ${show.name === 'design' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={` ${
+					show.name === "design" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<LuLayoutTemplate />
@@ -57,7 +60,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("shape", "shape")}
-				className={`${show.name === 'shape' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${
+					show.name === "shape" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaShapes />
@@ -67,7 +72,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("image", "uploadImage")}
-				className={`${ show.name === 'uploadImage' ? 'bg-[#252627]' : '' } w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${
+					show.name === "uploadImage" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaCloudUploadAlt />
@@ -77,7 +84,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("text", "text")}
-				className={`${show.name === 'text' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${
+					show.name === "text" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaTextHeight />
@@ -87,7 +96,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("project", "projects")}
-				className={`${show.name === 'projects' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${
+					show.name === "projects" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaFolderOpen />
@@ -97,7 +108,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("initImage", "images")}
-				className={`${show.name === 'images' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${
+					show.name === "images" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<BsImages />
@@ -107,7 +120,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("background", "background")}
-				className={`${show.name === 'background' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${
+					show.name === "background" ? "bg-[#252627]" : ""
+				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<RxTransparencyGrid />
@@ -123,7 +138,7 @@ type DrawerBoxProps = {
 	setShow: (show: { name: string; status: boolean }) => void;
 	state?: string;
 };
-const Drawer_Box = ({state, show, setShow }: DrawerBoxProps) => {
+const Drawer_Box = ({ state, show, setShow }: DrawerBoxProps) => {
 	return (
 		<div className="h-full w-[calc(100%-75px)]">
 			<div
@@ -137,41 +152,26 @@ const Drawer_Box = ({state, show, setShow }: DrawerBoxProps) => {
 				>
 					<MdKeyboardArrowLeft />
 				</div>
-				{
-					state === 'design' && <div className='grid grid-cols-2 gap-2'>
-						<TemplateDesign type='main' />
+				{state === "design" && (
+					<div className="grid grid-cols-2 gap-2">
+						<TemplateDesign type="main" />
 					</div>
-				}
-				{
-					state === 'shape' && <div>
-						shape
+				)}
+				{state === "shape" && (
+					<div className="grid grid-cols-3 gap-2">
+						<div className="h-[90px] bg-[#3c3c3d] cursor-pointer"></div>
+						<div className="h-[90px] bg-[#3c3c3d] cursor-pointer rounded-full"></div>
+						<div
+							style={{ clipPath: "polygon(50% 0, 100% 100%, 0 100%" }}
+							className="h-[90px] bg-[#3c3c3d] cursor-pointer  "
+						></div>
 					</div>
-				}
-				{
-					state === 'image' && <div>
-						image
-					</div>
-				}
-				{
-					state === 'text' && <div>
-						text
-					</div>
-				}
-				{
-					state === 'project' && <div>
-						project
-					</div>
-				}
-				{
-					state === 'initImage' && <div>
-						initImage
-					</div>
-				}
-				{
-					state === 'background' && <div>
-						background
-					</div>
-				}
+				)}
+				{state === "image" && <MyImages />}
+				{state === "text" && <div>text</div>}
+				{state === "project" && <div>project</div>}
+				{state === "initImage" && <div>initImage</div>}
+				{state === "background" && <div>background</div>}
 			</div>
 		</div>
 	);
