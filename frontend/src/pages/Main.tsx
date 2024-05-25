@@ -8,6 +8,7 @@ import { BsImages } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import TemplateDesign from '../components/main/TemplateDesign';
 
 const Main = () => {
 	const [state, setState] = useState("");
@@ -28,9 +29,9 @@ const Main = () => {
 			<Header_Design />
 
 			<div className="flex h-[calc(100%-60px)] w-screen">
-				<SideNav setElements={setElements} />
+				<SideNav show={show} setElements={setElements} />
 
-				<Drawer_Box show={show} setShow={setShow} />
+				<Drawer_Box state={state} show={show} setShow={setShow} />
 			</div>
 		</div>
 	);
@@ -39,13 +40,14 @@ const Main = () => {
 export default Main;
 type SideNavProps = {
 	setElements: (type: string, name: string) => void;
+	show: { name: string; status: boolean };
 };
-const SideNav = ({ setElements }: SideNavProps) => {
+const SideNav = ({ setElements, show }: SideNavProps) => {
 	return (
 		<div className="w-[80px] bg-[#18191B] z-50 h-full text-gray-400 overflow-y-auto">
 			<div
 				onClick={() => setElements("design", "design")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={` ${show.name === 'design' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<LuLayoutTemplate />
@@ -55,7 +57,7 @@ const SideNav = ({ setElements }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("shape", "shape")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${show.name === 'shape' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaShapes />
@@ -65,7 +67,7 @@ const SideNav = ({ setElements }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("image", "uploadImage")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${ show.name === 'uploadImage' ? 'bg-[#252627]' : '' } w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaCloudUploadAlt />
@@ -75,7 +77,7 @@ const SideNav = ({ setElements }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("text", "text")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${show.name === 'text' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaTextHeight />
@@ -85,7 +87,7 @@ const SideNav = ({ setElements }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("project", "projects")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${show.name === 'projects' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<FaFolderOpen />
@@ -95,7 +97,7 @@ const SideNav = ({ setElements }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("initImage", "images")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${show.name === 'images' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<BsImages />
@@ -105,7 +107,7 @@ const SideNav = ({ setElements }: SideNavProps) => {
 
 			<div
 				onClick={() => setElements("background", "background")}
-				className={` w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
+				className={`${show.name === 'background' ? 'bg-[#252627]' : ''} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
 					<RxTransparencyGrid />
@@ -119,8 +121,9 @@ const SideNav = ({ setElements }: SideNavProps) => {
 type DrawerBoxProps = {
 	show: { name: string; status: boolean };
 	setShow: (show: { name: string; status: boolean }) => void;
+	state?: string;
 };
-const Drawer_Box = ({ show, setShow }: DrawerBoxProps) => {
+const Drawer_Box = ({state, show, setShow }: DrawerBoxProps) => {
 	return (
 		<div className="h-full w-[calc(100%-75px)]">
 			<div
@@ -134,6 +137,41 @@ const Drawer_Box = ({ show, setShow }: DrawerBoxProps) => {
 				>
 					<MdKeyboardArrowLeft />
 				</div>
+				{
+					state === 'design' && <div className='grid grid-cols-2 gap-2'>
+						<TemplateDesign type='main' />
+					</div>
+				}
+				{
+					state === 'shape' && <div>
+						shape
+					</div>
+				}
+				{
+					state === 'image' && <div>
+						image
+					</div>
+				}
+				{
+					state === 'text' && <div>
+						text
+					</div>
+				}
+				{
+					state === 'project' && <div>
+						project
+					</div>
+				}
+				{
+					state === 'initImage' && <div>
+						initImage
+					</div>
+				}
+				{
+					state === 'background' && <div>
+						background
+					</div>
+				}
 			</div>
 		</div>
 	);
