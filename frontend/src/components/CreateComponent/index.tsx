@@ -1,21 +1,9 @@
+import { InfoType } from "../../types";
+
 interface ICreateComponent {
-	info: {
-		name: string;
-		width: number;
-		height: number;
-		color: string;
-		z_index: number;
-		image: string;
-	};
+	info: InfoType;
 	current_component:
-		| {
-				name: string;
-				width: number;
-				height: number;
-				color: string;
-				z_index: number;
-				image: string;
-		  }
+		| InfoType
 		| null
 		| string;
 	removeComponent?: () => void;
@@ -25,11 +13,14 @@ const CreateComponent = ({
 	current_component,
 	removeComponent,
 }: ICreateComponent) => {
+	console.log("current_component", current_component);
+	console.log("info", info);
 	let html: JSX.Element = <></>;
 
 	if (info.name === "main_frame") {
 		html = (
 			<div
+				onClick={() => info.setCurrentComponent(info) }
 				className="hover:border-[2px] hover:border-indigo-500 shadow-md"
 				style={{
 					width: info.width + "px",

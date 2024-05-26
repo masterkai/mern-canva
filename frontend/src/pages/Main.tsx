@@ -4,7 +4,7 @@ import { FaCloudUploadAlt, FaFolderOpen, FaShapes } from "react-icons/fa";
 import { FaTextHeight } from "react-icons/fa6";
 import { BsImages } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import TemplateDesign from "../components/main/TemplateDesign";
 import MyImages from "../components/MyImages";
@@ -12,22 +12,13 @@ import Projects from "../components/Projects";
 import Image from "../components/Image";
 import CreateComponent from "../components/CreateComponent";
 import { idGenerator } from "../utils";
+import { InfoType } from "../types";
 
-type ComponentType = {
-	image: string;
-	z_index: number;
-	setCurrentComponent: (a: string) => void;
-	color: string;
-	name: string;
-	width: number;
-	id: number;
-	type: string;
-	height: number;
-};
 
 const Main = () => {
-	const [current_component, setCurrentComponent] = useState<string>("");
+	const [current_component, setCurrentComponent] = useState<InfoType>("");
 	const [state, setState] = useState("");
+	const [color, setColor] = useState('')
 	const [show, setShow] = useState({
 		status: true,
 		name: "",
@@ -40,7 +31,7 @@ const Main = () => {
 			name,
 		});
 	};
-	const [components, setComponents] = useState<ComponentType[]>([
+	const [components, setComponents] = useState<InfoType[]>([
 		{
 			name: "main_frame",
 			type: "rect",
@@ -50,7 +41,7 @@ const Main = () => {
 			z_index: 1,
 			color: "#fff",
 			image: "",
-			setCurrentComponent: (a: string) => setCurrentComponent(a),
+			setCurrentComponent: (a: InfoType) => setCurrentComponent(a),
 		},
 	]);
 
@@ -69,6 +60,14 @@ const Main = () => {
 	const removeComponent = () => {
 		console.log("removeComponent");
 	};
+	useEffect(() => {
+		if (current_component) {
+			const index = components.findIndex(c => c.id === current_component.id)
+			components[index].color = color || current_component.color
+
+		}
+
+	},[color, components, current_component])
 	return (
 		<div className="min-w-screen h-screen bg-black">
 			<Header_Design />
@@ -79,7 +78,7 @@ const Main = () => {
 				<div className="h-full w-[calc(100%-75px)]">
 					<Drawer_Box state={state} show={show} setShow={setShow} />
 
-					<div className="w-full flex h-full">
+					<div className="w-full flex justify-center h-full">
 						<div
 							className={`flex justify-center relative items-center h-full ${
 								!current_component
@@ -103,9 +102,26 @@ const Main = () => {
 								</div>
 							</div>
 						</div>
+						{
+							current_component && <div className='h-full w-[250px] text-gray-300 bg-[#252627] px-3 py-2'>
+								<div className='flex gap-6 flex-col items-start h-full px-3 justify-start'>
+									<div className='flex gap-4 justify-start items-start mt-4'>
+										<span>Color :</span>
+										<label className='w-[30px] h-[30px] cursor-pointer rounded-sm' style={{ background: `${current_component.color && current_component.color !== '#fff' ? current_component.color : 'gray' }` }}  htmlFor="color"></label>
+										<input onChange={(e) => setColor(e.target.value)} type="color" className='invisible'  id="color" />
+
+									</div>
+
+								</div>
+
+							</div>
+						}
 					</div>
 				</div>
 			</div>
+
+
+
 		</div>
 	);
 };
