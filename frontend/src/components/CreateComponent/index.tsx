@@ -14,9 +14,10 @@ interface ICreateComponent {
 		color: string;
 		z_index: number;
 		image: string;
-	} | null;
+	} | null | string;
+	removeComponent?: () => void;
 }
-const CreateComponent = ({ info, current_component }: ICreateComponent) => {
+const CreateComponent = ({ info, current_component, removeComponent }: ICreateComponent) => {
 	let html: JSX.Element = <></>;
 
 	if (info.name === "main_frame") {

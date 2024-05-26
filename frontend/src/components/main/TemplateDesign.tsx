@@ -6,6 +6,7 @@ const TemplateDesign = ({ type }: TemplateDesignProps) => {
 		<>
 			{[1, 2, 3, 4].map((design, i) => (
 				<div
+					key={i}
 					className={`group w-full rounded-md overflow-hidden bg-[#ffffff] cursor-pointer`}
 				>
 					<img
