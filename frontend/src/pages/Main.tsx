@@ -55,10 +55,8 @@ const Main = () => {
 		},
 	]);
 
-	function moveElement(id: number) {
-		const temp = components.filter(c => c.id !== id)
-		setCurrentComponent(null)
-		setComponents(temp)
+	function moveElement() {
+		console.log("moveElement");
 	}
 
 	function resizeElement() {
@@ -69,8 +67,10 @@ const Main = () => {
 		console.log("rotate element");
 	}
 
-	function removeComponent() {
-		console.log("removeComponent");
+	function removeComponent(id: number) {
+		const temp = components.filter(c => c.id !== id)
+		setCurrentComponent(null)
+		setComponents(temp)
 	}
 
 	// remove_background function
