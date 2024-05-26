@@ -7,17 +7,24 @@ interface ICreateComponent {
 		z_index: number;
 		image: string;
 	};
-	current_component: {
-		name: string;
-		width: number;
-		height: number;
-		color: string;
-		z_index: number;
-		image: string;
-	} | null | string;
+	current_component:
+		| {
+				name: string;
+				width: number;
+				height: number;
+				color: string;
+				z_index: number;
+				image: string;
+		  }
+		| null
+		| string;
 	removeComponent?: () => void;
 }
-const CreateComponent = ({ info, current_component, removeComponent }: ICreateComponent) => {
+const CreateComponent = ({
+	info,
+	current_component,
+	removeComponent,
+}: ICreateComponent) => {
 	let html: JSX.Element = <></>;
 
 	if (info.name === "main_frame") {
