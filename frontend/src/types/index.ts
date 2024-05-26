@@ -1,11 +1,29 @@
 export type InfoType = {
 	id: number;
-	type: string;
-	name: string;
+	name: InfoName;
+	type: ShapeType;
+	left: number;
+	top: number;
+	opacity: number;
 	width: number;
 	height: number;
-	color: string;
+	rotate: number;
 	z_index: number;
-	image: string;
+	color: string;
+	image?: string;
+	moveElement: (id: number) => void;
+	resizeElement: () => void;
+	rotateElement: () => void;
 	setCurrentComponent: (a: InfoType) => void;
 };
+
+export enum ShapeType {
+	RECTANGLE = "rectangle",
+	CIRCLE = "circle",
+	TRIANGLE = "triangle",
+}
+
+export enum InfoName {
+	MAIN_FRAME = "main_frame",
+	SHAPE = "shape",
+}

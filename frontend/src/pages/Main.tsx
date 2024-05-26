@@ -12,13 +12,16 @@ import Projects from "../components/Projects";
 import Image from "../components/Image";
 import CreateComponent from "../components/CreateComponent";
 import { idGenerator } from "../utils";
-import { InfoType } from "../types";
+import { InfoName, InfoType, ShapeType } from "../types";
 
 const Main = () => {
 	const [image, setImage] = useState("");
-	const [current_component, setCurrentComponent] = useState<InfoType| null>(null);
+	const [current_component, setCurrentComponent] = useState<InfoType | null>(
+		null,
+	);
 	const [state, setState] = useState("");
 	const [color, setColor] = useState("");
+	const [rotate, setRotate] = useState(0);
 	const [show, setShow] = useState({
 		status: true,
 		name: "",
@@ -33,33 +36,42 @@ const Main = () => {
 	};
 	const [components, setComponents] = useState<InfoType[]>([
 		{
-			name: "main_frame",
-			type: "rect",
 			id: idGenerator(),
+			name: InfoName.MAIN_FRAME,
+			type: ShapeType.RECTANGLE,
 			height: 500,
 			width: 650,
 			z_index: 1,
 			color: "#fff",
 			image: "",
 			setCurrentComponent: (a: InfoType) => setCurrentComponent(a),
+			moveElement,
+			resizeElement,
+			rotateElement,
+			left: 0,
+			top: 0,
+			opacity: 0,
+			rotate: 0,
 		},
 	]);
 
-	const moveElement = () => {
-		console.log("move element");
-	};
+	function moveElement(id: number) {
+		const temp = components.filter(c => c.id !== id)
+		setCurrentComponent(null)
+		setComponents(temp)
+	}
 
-	const resizeElement = () => {
+	function resizeElement() {
 		console.log("resize element");
-	};
+	}
 
-	const rotateElement = () => {
+	function rotateElement() {
 		console.log("rotate element");
-	};
+	}
 
-	const removeComponent = () => {
+	function removeComponent() {
 		console.log("removeComponent");
-	};
+	}
 
 	// remove_background function
 	const remove_background = () => {
@@ -74,12 +86,33 @@ const Main = () => {
 		}
 	};
 
+	const createShape = (name: InfoName, type: ShapeType) => {
+		const style = {
+			id: Date.now(),
+			name: name,
+			type,
+			left: 10,
+			top: 10,
+			opacity: 1,
+			width: 200,
+			height: 150,
+			rotate,
+			z_index: 2,
+			color: "#3c3c3d",
+			setCurrentComponent: (a: InfoType) => setCurrentComponent(a),
+			moveElement,
+			resizeElement,
+			rotateElement,
+		};
+		setComponents([...components, style]);
+	};
+
 	useEffect(() => {
 		if (current_component) {
 			const index = components.findIndex((c) => c.id === current_component.id);
 			const temp = components.filter((c) => c.id !== current_component.id);
 
-			if (current_component.name === "main_frame" && image) {
+			if (current_component.name === InfoName.MAIN_FRAME && image) {
 				components[index].image = image || current_component.image;
 			}
 			components[index].color = color || current_component.color;
@@ -95,6 +128,7 @@ const Main = () => {
 
 				<div className="h-full w-[calc(100%-75px)]">
 					<Drawer_Box
+						createShape={createShape}
 						setImage={setImage}
 						state={state}
 						show={show}
@@ -268,8 +302,15 @@ type DrawerBoxProps = {
 	setShow: (show: { name: string; status: boolean }) => void;
 	state?: string;
 	setImage: (image: string) => void;
+	createShape: (name: InfoName, type: ShapeType) => void;
 };
-const Drawer_Box = ({ state, show, setShow, setImage }: DrawerBoxProps) => {
+const Drawer_Box = ({
+	state,
+	show,
+	setShow,
+	setImage,
+	createShape,
+}: DrawerBoxProps) => {
 	return (
 		<div
 			className={`${
@@ -289,9 +330,16 @@ const Drawer_Box = ({ state, show, setShow, setImage }: DrawerBoxProps) => {
 			)}
 			{state === "shape" && (
 				<div className="grid grid-cols-3 gap-2">
-					<div className="h-[90px] bg-[#3c3c3d] cursor-pointer"></div>
-					<div className="h-[90px] bg-[#3c3c3d] cursor-pointer rounded-full"></div>
 					<div
+						onClick={() => createShape(InfoName.SHAPE, ShapeType.RECTANGLE)}
+						className="h-[90px] bg-[#3c3c3d] cursor-pointer"
+					></div>
+					<div
+						onClick={() => createShape(InfoName.SHAPE, ShapeType.CIRCLE)}
+						className="h-[90px] bg-[#3c3c3d] cursor-pointer rounded-full"
+					></div>
+					<div
+						onClick={() => createShape(InfoName.SHAPE, ShapeType.TRIANGLE)}
 						style={{ clipPath: "polygon(50% 0, 100% 100%, 0 100%" }}
 						className="h-[90px] bg-[#3c3c3d] cursor-pointer  "
 					></div>
