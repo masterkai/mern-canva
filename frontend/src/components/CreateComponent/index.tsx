@@ -2,10 +2,7 @@ import { InfoType } from "../../types";
 
 interface ICreateComponent {
 	info: InfoType;
-	current_component:
-		| InfoType
-		| null
-		| string;
+	current_component: InfoType | null | string;
 	removeComponent?: () => void;
 }
 const CreateComponent = ({
@@ -20,7 +17,7 @@ const CreateComponent = ({
 	if (info.name === "main_frame") {
 		html = (
 			<div
-				onClick={() => info.setCurrentComponent(info) }
+				onClick={() => info.setCurrentComponent(info)}
 				className="hover:border-[2px] hover:border-indigo-500 shadow-md"
 				style={{
 					width: info.width + "px",

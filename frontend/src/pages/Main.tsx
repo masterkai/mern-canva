@@ -4,7 +4,7 @@ import { FaCloudUploadAlt, FaFolderOpen, FaShapes } from "react-icons/fa";
 import { FaTextHeight } from "react-icons/fa6";
 import { BsImages } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import TemplateDesign from "../components/main/TemplateDesign";
 import MyImages from "../components/MyImages";
@@ -14,20 +14,20 @@ import CreateComponent from "../components/CreateComponent";
 import { idGenerator } from "../utils";
 import { InfoType } from "../types";
 
-
 const Main = () => {
-	const [current_component, setCurrentComponent] = useState<InfoType>("");
+	const [image, setImage] = useState("");
+	const [current_component, setCurrentComponent] = useState<InfoType| null>(null);
 	const [state, setState] = useState("");
-	const [color, setColor] = useState('')
+	const [color, setColor] = useState("");
 	const [show, setShow] = useState({
 		status: true,
 		name: "",
 	});
 
-	const setElements = (type, name) => {
+	const setElements = (type: SetStateAction<string>, name: string) => {
 		setState(type);
 		setShow({
-			state: false,
+			status: false,
 			name,
 		});
 	};
@@ -60,14 +60,32 @@ const Main = () => {
 	const removeComponent = () => {
 		console.log("removeComponent");
 	};
+
+	// remove_background function
+	const remove_background = () => {
+		if (current_component) {
+			const com = components.find((c) => c.id === current_component.id);
+			if (com) {
+				const temp = components.filter((c) => c.id !== current_component.id);
+				com.image = "";
+				setImage("");
+				setComponents([...temp, com]);
+			}
+		}
+	};
+
 	useEffect(() => {
 		if (current_component) {
-			const index = components.findIndex(c => c.id === current_component.id)
-			components[index].color = color || current_component.color
+			const index = components.findIndex((c) => c.id === current_component.id);
+			const temp = components.filter((c) => c.id !== current_component.id);
 
+			if (current_component.name === "main_frame" && image) {
+				components[index].image = image || current_component.image;
+			}
+			components[index].color = color || current_component.color;
+			setComponents([...temp, components[index]]);
 		}
-
-	},[color, components, current_component])
+	}, [color, image]);
 	return (
 		<div className="min-w-screen h-screen bg-black">
 			<Header_Design />
@@ -76,7 +94,12 @@ const Main = () => {
 				<SideNav show={show} setElements={setElements} />
 
 				<div className="h-full w-[calc(100%-75px)]">
-					<Drawer_Box state={state} show={show} setShow={setShow} />
+					<Drawer_Box
+						setImage={setImage}
+						state={state}
+						show={show}
+						setShow={setShow}
+					/>
 
 					<div className="w-full flex justify-center h-full">
 						<div
@@ -102,26 +125,45 @@ const Main = () => {
 								</div>
 							</div>
 						</div>
-						{
-							current_component && <div className='h-full w-[250px] text-gray-300 bg-[#252627] px-3 py-2'>
-								<div className='flex gap-6 flex-col items-start h-full px-3 justify-start'>
-									<div className='flex gap-4 justify-start items-start mt-4'>
+						{current_component && (
+							<div className="h-full w-[250px] text-gray-300 bg-[#252627] px-3 py-2">
+								<div className="flex gap-6 flex-col items-start h-full px-3 justify-start">
+									<div className="flex gap-4 justify-start items-start mt-4">
 										<span>Color :</span>
-										<label className='w-[30px] h-[30px] cursor-pointer rounded-sm' style={{ background: `${current_component.color && current_component.color !== '#fff' ? current_component.color : 'gray' }` }}  htmlFor="color"></label>
-										<input onChange={(e) => setColor(e.target.value)} type="color" className='invisible'  id="color" />
-
+										<label
+											className="w-[30px] h-[30px] cursor-pointer rounded-sm"
+											style={{
+												background: `${
+													current_component.color &&
+													current_component.color !== "#fff"
+														? current_component.color
+														: "gray"
+												}`,
+											}}
+											htmlFor="color"
+										></label>
+										<input
+											onChange={(e) => setColor(e.target.value)}
+											type="color"
+											className="invisible"
+											id="color"
+										/>
 									</div>
-
+									{current_component.name === "main_frame" &&
+										current_component.image && (
+											<div
+												className="p-[6px] bg-slate-600 text-white cursor-pointer"
+												onClick={remove_background}
+											>
+												Remove Background
+											</div>
+										)}
 								</div>
-
 							</div>
-						}
+						)}
 					</div>
 				</div>
 			</div>
-
-
-
 		</div>
 	);
 };
@@ -225,8 +267,9 @@ type DrawerBoxProps = {
 	show: { name: string; status: boolean };
 	setShow: (show: { name: string; status: boolean }) => void;
 	state?: string;
+	setImage: (image: string) => void;
 };
-const Drawer_Box = ({ state, show, setShow }: DrawerBoxProps) => {
+const Drawer_Box = ({ state, show, setShow, setImage }: DrawerBoxProps) => {
 	return (
 		<div
 			className={`${
@@ -273,6 +316,7 @@ const Drawer_Box = ({ state, show, setShow }: DrawerBoxProps) => {
 					<div className="grid grid-cols-2 gap-2">
 						{[1, 2, 3, 4, 5, 6].map((img, i) => (
 							<div
+								onClick={() => setImage("http://localhost:5173/canva.png")}
 								key={i}
 								className="w-full h-[90px] overflow-hidden rounded-sm cursor-pointer"
 							>
