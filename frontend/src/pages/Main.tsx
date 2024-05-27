@@ -55,8 +55,23 @@ const Main = () => {
 		},
 	]);
 
-	function moveElement() {
-		console.log("moveElement");
+	function moveElement(id: string , currentInfo:InfoType) {
+		setCurrentComponent(currentInfo)
+		let isMoving = true
+
+		const currentDiv = document.getElementById(id)!
+
+		const mouseMove = () => {
+			const getStyle = window.getComputedStyle(currentDiv)
+		}
+
+		const mouseUp = () => {
+
+		}
+
+
+		window.addEventListener('mousemove',mouseMove)
+		window.addEventListener('mouseup',mouseUp)
 	}
 
 	function resizeElement(exID: string, info: InfoType) {

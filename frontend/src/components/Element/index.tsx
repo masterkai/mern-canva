@@ -13,7 +13,7 @@ const Element = ({ id, info, exId }: ElementProps) => {
 				<>
 					<div
 						onMouseDown={(e) => {
-							info.resizeElement(exId, info);
+							info.resizeElement(id, info);
 							e.preventDefault();
 						}}
 						className="hidden absolute group-hover:block -bottom-[3px] -right-[3px] w-[10px] h-[10px] cursor-nwse-resize bg-green-600 z-[99999] "
@@ -22,7 +22,7 @@ const Element = ({ id, info, exId }: ElementProps) => {
 					</div>
 					<div
 						onMouseDown={(e) => {
-							info.resizeElement(exId, info);
+							info.resizeElement(id, info);
 							e.preventDefault();
 						}}
 						className="hidden absolute group-hover:block -top-[3px] -right-[3px] w-[10px] h-[10px] cursor-nesw-resize bg-green-600 z-[99999] "
@@ -31,7 +31,7 @@ const Element = ({ id, info, exId }: ElementProps) => {
 					</div>
 					<div
 						onMouseDown={(e) => {
-							info.resizeElement(exId, info);
+							info.resizeElement(id, info);
 							e.preventDefault();
 						}}
 						className="hidden absolute group-hover:block -bottom-[3px] -left-[3px] w-[10px] h-[10px] cursor-nesw-resize bg-green-600 z-[99999] "
@@ -43,10 +43,8 @@ const Element = ({ id, info, exId }: ElementProps) => {
 				<>
 					<div
 						onMouseDown={(e) => {
-							if (exId !== undefined) {
-								info.resizeElement(exId, info);
-								e.preventDefault();
-							}
+							info.resizeElement(id, info);
+							e.preventDefault();
 						}}
 						className="hidden absolute group-hover:block -bottom-[3px] -right-[3px] w-[10px] h-[10px] cursor-nwse-resize bg-green-600 z-[99999] "
 					>
@@ -54,10 +52,8 @@ const Element = ({ id, info, exId }: ElementProps) => {
 					</div>
 					<div
 						onMouseDown={(e) => {
-							if (exId !== undefined) {
-								info.resizeElement(exId, info);
-								e.preventDefault();
-							}
+							info.resizeElement(id, info);
+							e.preventDefault();
 						}}
 						className="hidden absolute group-hover:block -top-[3px] -right-[3px] w-[10px] h-[10px] cursor-nesw-resize bg-green-600 z-[99999] "
 					>
@@ -65,10 +61,8 @@ const Element = ({ id, info, exId }: ElementProps) => {
 					</div>
 					<div
 						onMouseDown={(e) => {
-							if (exId !== undefined) {
-								info.resizeElement(exId, info);
-								e.preventDefault();
-							}
+							info.resizeElement(id, info);
+							e.preventDefault();
 						}}
 						className="hidden absolute group-hover:block -bottom-[3px] -left-[3px] w-[10px] h-[10px] cursor-nwse-resize bg-green-600 z-[99999] "
 					>
