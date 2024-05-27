@@ -59,18 +59,19 @@ const Main = () => {
 		console.log("moveElement");
 	}
 
-	function resizeElement() {
-		console.log("resize element");
+	function resizeElement(exID: string, info: InfoType) {
+		console.log("resize element", exID);
+		return info;
 	}
 
-	function rotateElement() {
+	function rotateElement(id: string, info: InfoType) {
 		console.log("rotate element");
 	}
 
 	function removeComponent(id: number) {
-		const temp = components.filter(c => c.id !== id)
-		setCurrentComponent(null)
-		setComponents(temp)
+		const temp = components.filter((c) => c.id !== id);
+		setCurrentComponent(null);
+		setComponents(temp);
 	}
 
 	// remove_background function

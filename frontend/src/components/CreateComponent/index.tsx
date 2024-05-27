@@ -1,7 +1,7 @@
 import { InfoName, InfoType, ShapeType } from "../../types";
 import { FaTrashAlt } from "react-icons/fa";
 import { useKeyGen } from "../../hooks/useKeyGen.ts";
-
+import Element from "../Element";
 interface ICreateComponent {
 	info: InfoType;
 	current_component: InfoType | null;
@@ -38,91 +38,115 @@ const CreateComponent = ({
 
 	if (info.name === InfoName.SHAPE && info.type === ShapeType.RECTANGLE) {
 		if (removeComponent) {
-			html = <div id={ randValue.toString() } onClick={ () => info.setCurrentComponent( info ) } style={ {
-				width: info.width + 'px',
-				height: info.height + 'px',
-				background: info.color,
-				opacity: info.opacity,
-				left: info.left + 'px',
-				top: info.top + 'px',
-				zIndex: info.z_index,
-				transform: info.rotate ? `rotate(${ info.rotate }deg)` : 'rotate(0deg)'
-			} }
-						className='absolute group hover:border-[2px] hover:border-indigo-500'
-			>
-				{
-					current_component?.id === info.id && <div
-						onClick={ () => removeComponent( info.id ) }
-						className='px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md'>
-						<FaTrashAlt/>
-					</div>
-				}
-			</div>
+			html = (
+				<div
+					id={randValue.toString()}
+					onClick={() => info.setCurrentComponent(info)}
+					style={{
+						width: info.width + "px",
+						height: info.height + "px",
+						background: info.color,
+						opacity: info.opacity,
+						left: info.left + "px",
+						top: info.top + "px",
+						zIndex: info.z_index,
+						transform: info.rotate
+							? `rotate(${info.rotate}deg)`
+							: "rotate(0deg)",
+					}}
+					className="absolute group hover:border-[2px] hover:border-indigo-500"
+				>
+					<Element id={randValue} info={info} exId="" />
+					{current_component?.id === info.id && (
+						<div
+							onClick={() => removeComponent(info.id)}
+							className="px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md"
+						>
+							<FaTrashAlt />
+						</div>
+					)}
+				</div>
+			);
 		}
 	}
 
 	if (info.name === InfoName.SHAPE && info.type === ShapeType.CIRCLE) {
 		if (removeComponent) {
-			html = <div id={ randValue } onClick={ () => info.setCurrentComponent( info ) } style={ {
-				left: info.left + 'px',
-				top: info.top + 'px',
-				zIndex: info.z_index,
-				transform: info.rotate ? `rotate(${ info.rotate }deg)` : 'rotate(0deg)'
-			} }
-						className='absolute group hover:border-[2px] hover:border-indigo-500'
-			>
-				<div id={ `${ randValue }c` } className='rounded-full' style={ {
-					width: info.width + 'px',
-					height: info.width + 'px',
-					background: info.color,
-					opacity: info.opacity,
-				} }>
-
+			html = (
+				<div
+					id={randValue}
+					onClick={() => info.setCurrentComponent(info)}
+					style={{
+						left: info.left + "px",
+						top: info.top + "px",
+						zIndex: info.z_index,
+						transform: info.rotate
+							? `rotate(${info.rotate}deg)`
+							: "rotate(0deg)",
+					}}
+					className="absolute group hover:border-[2px] hover:border-indigo-500"
+				>
+					<div
+						id={`${randValue}c`}
+						className="rounded-full"
+						style={{
+							width: info.width + "px",
+							height: info.width + "px",
+							background: info.color,
+							opacity: info.opacity,
+						}}
+					></div>
+					<Element id={randValue} info={info} exId={`${randValue}c`} />
+					{current_component?.id === info.id && (
+						<div
+							onClick={() => removeComponent(info.id)}
+							className="px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md"
+						>
+							<FaTrashAlt />
+						</div>
+					)}
 				</div>
-
-				{
-					current_component?.id === info.id && <div
-						onClick={ () => removeComponent( info.id ) }
-						className='px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md'>
-						<FaTrashAlt/>
-					</div>
-				}
-
-			</div>
+			);
 		}
 	}
 
-
-
 	if (info.name === InfoName.SHAPE && info.type === ShapeType.TRIANGLE) {
 		if (removeComponent) {
-			html = <div id={ randValue } onClick={ () => info.setCurrentComponent( info ) } style={ {
-				left: info.left + 'px',
-				top: info.top + 'px',
-				zIndex: info.z_index,
-				transform: info.rotate ? `rotate(${ info.rotate }deg)` : 'rouate(0deg)'
-			} }
-						className='absolute group hover:border-[2px] hover:border-indigo-500'
-			>
-				<div id={ `${ randValue }t` } style={ {
-					width: info.width + 'px',
-					height: info.height + 'px',
-					background: info.color,
-					opacity: info.opacity,
-					clipPath: 'polygon(50% 0, 100% 100%, 0 100%)'
-				} }>
-
+			html = (
+				<div
+					id={randValue}
+					onClick={() => info.setCurrentComponent(info)}
+					style={{
+						left: info.left + "px",
+						top: info.top + "px",
+						zIndex: info.z_index,
+						transform: info.rotate
+							? `rotate(${info.rotate}deg)`
+							: "rouate(0deg)",
+					}}
+					className="absolute group hover:border-[2px] hover:border-indigo-500"
+				>
+					<div
+						id={`${randValue}t`}
+						style={{
+							width: info.width + "px",
+							height: info.height + "px",
+							background: info.color,
+							opacity: info.opacity,
+							clipPath: "polygon(50% 0, 100% 100%, 0 100%)",
+						}}
+					></div>
+					<Element id={randValue} info={info} exId={`${randValue}t`} />
+					{current_component?.id === info.id && (
+						<div
+							onClick={() => removeComponent(info.id)}
+							className="px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md"
+						>
+							<FaTrashAlt />
+						</div>
+					)}
 				</div>
-
-				{
-					current_component?.id === info.id && <div
-						onClick={ () => removeComponent( info.id ) }
-						className='px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md'>
-						<FaTrashAlt/>
-					</div>
-				}
-
-			</div>
+			);
 		}
 	}
 	return html;

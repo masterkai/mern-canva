@@ -11,9 +11,9 @@ export type InfoType = {
 	z_index: number;
 	color: string;
 	image?: string;
-	moveElement: (id: number) => void;
-	resizeElement: () => void;
-	rotateElement: () => void;
+	moveElement: (id: string, info: InfoType) => void;
+	resizeElement: (exID: string, info: InfoType) => void;
+	rotateElement: (exID: string, info: InfoType) => void;
 	setCurrentComponent: (a: InfoType) => void;
 };
 
