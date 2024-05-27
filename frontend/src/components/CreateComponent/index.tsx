@@ -122,7 +122,7 @@ const CreateComponent = ({
 						zIndex: info.z_index,
 						transform: info.rotate
 							? `rotate(${info.rotate}deg)`
-							: "rouate(0deg)",
+							: "rotate(0deg)",
 					}}
 					className="absolute group hover:border-[2px] hover:border-indigo-500"
 				>

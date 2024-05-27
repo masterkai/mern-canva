@@ -23,7 +23,25 @@ export enum ShapeType {
 	TRIANGLE = "triangle",
 }
 
+export enum TaskType {
+	DESIGN = "design",
+	SHAPE = "shape",
+	TEXT = "text",
+	IMAGE = "image",
+	PROJECT = "project",
+	INIT_IMAGE = "initImage",
+	BACKGROUND = "background",
+}
+
 export enum InfoName {
 	MAIN_FRAME = "main_frame",
 	SHAPE = "shape",
+	TEXT = "text",
+	DESIGN = "design",
+	UPLOAD_IMAGE = "upload_image",
+	PROJECTS = "projects",
+	IMAGES = "images",
+	BACKGROUND = "background",
 }
+
+export type ShowType = { name: InfoName | string; status: boolean };

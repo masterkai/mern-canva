@@ -12,22 +12,29 @@ import Projects from "../components/Projects";
 import Image from "../components/Image";
 import CreateComponent from "../components/CreateComponent";
 import { idGenerator } from "../utils";
-import { InfoName, InfoType, ShapeType } from "../types";
+import { InfoName, InfoType, ShapeType, ShowType, TaskType } from "../types";
 
 const Main = () => {
 	const [image, setImage] = useState("");
 	const [current_component, setCurrentComponent] = useState<InfoType | null>(
 		null,
 	);
-	const [state, setState] = useState("");
+	const [state, setState] = useState<ShapeType | TaskType | null>(null);
 	const [color, setColor] = useState("");
 	const [rotate, setRotate] = useState(0);
-	const [show, setShow] = useState({
+	const [left, setLeft] = useState<number | null>(null);
+	const [top, setTop] = useState<number | null>(null);
+	const [width, setWidth] = useState<number | null>(null);
+	const [height, setHeight] = useState<number | null>(null);
+	const [show, setShow] = useState<ShowType>({
 		status: true,
 		name: "",
 	});
 
-	const setElements = (type: SetStateAction<string>, name: string) => {
+	const setElements = (
+		type: SetStateAction<ShapeType | TaskType | null>,
+		name: InfoName,
+	) => {
 		setState(type);
 		setShow({
 			status: false,
@@ -55,32 +62,100 @@ const Main = () => {
 		},
 	]);
 
-	function moveElement(id: string , currentInfo:InfoType) {
-		setCurrentComponent(currentInfo)
-		let isMoving = true
+	function moveElement(id: string, currentInfo: InfoType) {
+		setCurrentComponent(currentInfo);
+		let isMoving = true;
 
-		const currentDiv = document.getElementById(id)!
+		const currentDiv = document.getElementById(id)!;
 
-		const mouseMove = () => {
-			const getStyle = window.getComputedStyle(currentDiv)
-		}
+		const mouseMove = ({ movementX, movementY }: MouseEvent) => {
+			const getStyle = window.getComputedStyle(currentDiv);
+			const left = parseInt(getStyle.left);
+			const top = parseInt(getStyle.top);
+			if (isMoving) {
+				currentDiv.style.left = `${left + movementX}px`;
+				currentDiv.style.top = `${top + movementY}px`;
+			}
+		};
 
-		const mouseUp = () => {
+		const mouseUp = (e: MouseEvent) => {
+			console.log(e);
+			isMoving = false;
+			window.removeEventListener("mousemove", mouseMove);
+			window.removeEventListener("mouseup", mouseUp);
+			setLeft(parseInt(currentDiv.style.left));
+			setTop(parseInt(currentDiv.style.top));
+		};
 
-		}
-
-
-		window.addEventListener('mousemove',mouseMove)
-		window.addEventListener('mouseup',mouseUp)
+		window.addEventListener("mousemove", mouseMove);
+		window.addEventListener("mouseup", mouseUp);
 	}
 
-	function resizeElement(exID: string, info: InfoType) {
-		console.log("resize element", exID);
-		return info;
+	function resizeElement(id: string, currentInfo: InfoType) {
+		setCurrentComponent(currentInfo);
+		let isMoving = true;
+
+		const currentDiv = document.getElementById(id)!;
+
+		const mouseMove = ({ movementX, movementY }: MouseEvent) => {
+			const getStyle = window.getComputedStyle(currentDiv);
+			const width = parseInt(getStyle.width);
+			const height = parseInt(getStyle.height);
+			if (isMoving) {
+				currentDiv.style.width = `${width + movementX}px`;
+				currentDiv.style.height = `${height + movementY}px`;
+			}
+		};
+
+		const mouseUp = (e: MouseEvent) => {
+			console.log(e);
+			isMoving = false;
+			window.removeEventListener("mousemove", mouseMove);
+			window.removeEventListener("mouseup", mouseUp);
+			setWidth(parseInt(currentDiv.style.width));
+			setHeight(parseInt(currentDiv.style.height));
+		};
+
+		window.addEventListener("mousemove", mouseMove);
+		window.addEventListener("mouseup", mouseUp);
 	}
 
-	function rotateElement(id: string, info: InfoType) {
-		console.log("rotate element");
+	function rotateElement(id: string, currentInfo: InfoType) {
+		setCurrentComponent(null);
+		setCurrentComponent(currentInfo);
+		const target = document.getElementById(id)!;
+
+		const mouseMove = ({ movementX }: MouseEvent) => {
+			const getStyle = window.getComputedStyle(target);
+			const trans = getStyle.transform;
+
+			const values = trans?.split("(")[1]?.split(")")[0]?.split(",");
+			console.log(values);
+			const angle = Math.round(Math.atan2(Number( values[1] ), Number( values[0] )) * (180 / Math.PI))
+
+			let deg = angle < 0 ? angle + 360 : angle
+			if (movementX) {
+				deg = deg + movementX
+			}
+			target.style.transform = `rotate(${deg}deg)`
+		};
+
+		const mouseUp = (e:MouseEvent) => {
+			window.removeEventListener('mousemove',mouseMove)
+			window.removeEventListener('mouseup',mouseUp)
+
+			const getStyle = window.getComputedStyle(target)
+			const trans = getStyle.transform
+
+			const values = trans?.split('(')[1]?.split(')')[0]?.split(',')
+			const angle = Math.round(Math.atan2(Number( values[1] ), Number( values[0] )) * (180 / Math.PI))
+
+			const deg = angle < 0 ? angle + 360 : angle
+			setRotate(deg)
+		};
+
+		window.addEventListener("mousemove", mouseMove);
+		window.addEventListener("mouseup", mouseUp);
 	}
 
 	function removeComponent(id: number) {
@@ -129,14 +204,30 @@ const Main = () => {
 			const temp = components.filter((c) => c.id !== current_component.id);
 
 			if (components[index]) {
+				if (current_component.name !== InfoName.TEXT) {
+					components[index].width = width || current_component.width;
+					components[index].height = height || current_component.height;
+					components[index].rotate = rotate || current_component.rotate
+				}
 				if (current_component.name === InfoName.MAIN_FRAME && image) {
 					components[index].image = image || current_component.image;
 				}
+				if (current_component.name !== InfoName.MAIN_FRAME) {
+					components[index].left = left || current_component.left;
+					components[index].top = top || current_component.top;
+				}
 				components[index].color = color || current_component.color;
+
+				setComponents([...temp, components[index]]);
+				setColor("");
+				setLeft(null);
+				setTop(null);
+				setWidth(null);
+				setHeight(null);
+				setRotate(0)
 			}
-			setComponents([...temp, components[index]]);
 		}
-	}, [color, image]);
+	}, [color, image, left, top, width, height, rotate]);
 	return (
 		<div className="min-w-screen h-screen bg-black">
 			<Header_Design />
@@ -222,16 +313,19 @@ const Main = () => {
 
 export default Main;
 type SideNavProps = {
-	setElements: (type: string, name: string) => void;
-	show: { name: string; status: boolean };
+	setElements: (
+		type: SetStateAction<ShapeType | TaskType | null>,
+		name: InfoName,
+	) => void;
+	show: ShowType;
 };
 const SideNav = ({ setElements, show }: SideNavProps) => {
 	return (
 		<div className="w-[80px] bg-[#18191B] z-50 h-full text-gray-400 overflow-y-auto">
 			<div
-				onClick={() => setElements("design", "design")}
+				onClick={() => setElements(TaskType.DESIGN, InfoName.DESIGN)}
 				className={` ${
-					show.name === "design" ? "bg-[#252627]" : ""
+					show.name === InfoName.DESIGN ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -241,9 +335,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 			</div>
 
 			<div
-				onClick={() => setElements("shape", "shape")}
+				onClick={() => setElements(TaskType.SHAPE, InfoName.DESIGN)}
 				className={`${
-					show.name === "shape" ? "bg-[#252627]" : ""
+					show.name === InfoName.SHAPE ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -253,9 +347,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 			</div>
 
 			<div
-				onClick={() => setElements("image", "uploadImage")}
+				onClick={() => setElements(TaskType.IMAGE, InfoName.UPLOAD_IMAGE)}
 				className={`${
-					show.name === "uploadImage" ? "bg-[#252627]" : ""
+					show.name === InfoName.UPLOAD_IMAGE ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -265,9 +359,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 			</div>
 
 			<div
-				onClick={() => setElements("text", "text")}
+				onClick={() => setElements(TaskType.TEXT, InfoName.TEXT)}
 				className={`${
-					show.name === "text" ? "bg-[#252627]" : ""
+					show.name === InfoName.TEXT ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -277,9 +371,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 			</div>
 
 			<div
-				onClick={() => setElements("project", "projects")}
+				onClick={() => setElements(TaskType.PROJECT, InfoName.PROJECTS)}
 				className={`${
-					show.name === "projects" ? "bg-[#252627]" : ""
+					show.name === InfoName.PROJECTS ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -289,9 +383,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 			</div>
 
 			<div
-				onClick={() => setElements("initImage", "images")}
+				onClick={() => setElements(TaskType.INIT_IMAGE, InfoName.IMAGES)}
 				className={`${
-					show.name === "images" ? "bg-[#252627]" : ""
+					show.name === InfoName.IMAGES ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -301,9 +395,9 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 			</div>
 
 			<div
-				onClick={() => setElements("background", "background")}
+				onClick={() => setElements(TaskType.BACKGROUND, InfoName.BACKGROUND)}
 				className={`${
-					show.name === "background" ? "bg-[#252627]" : ""
+					show.name === InfoName.BACKGROUND ? "bg-[#252627]" : ""
 				} w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}
 			>
 				<span className="text-2xl">
@@ -318,7 +412,7 @@ const SideNav = ({ setElements, show }: SideNavProps) => {
 type DrawerBoxProps = {
 	show: { name: string; status: boolean };
 	setShow: (show: { name: string; status: boolean }) => void;
-	state?: string;
+	state?: ShapeType | TaskType | null;
 	setImage: (image: string) => void;
 	createShape: (name: InfoName, type: ShapeType) => void;
 };

@@ -4,10 +4,14 @@ export const useKeyGen = () => {
 
 	return {
 		getKey: (object: NonNullable<unknown>): string => {
-			if (!ids.has(object)) {
-				ids.set(object, String(curID++));
+			if (typeof object === "object" && object !== null) {
+				if (!ids.has(object)) {
+					ids.set(object, String(curID++));
+				}
+				return ids.get(object);
+			} else {
+				throw new Error("Invalid object");
 			}
-			return ids.get(object);
 		},
 	};
 };
