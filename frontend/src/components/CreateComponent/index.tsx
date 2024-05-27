@@ -2,6 +2,7 @@ import { InfoName, InfoType, ShapeType } from "../../types";
 import { FaTrashAlt } from "react-icons/fa";
 import { useKeyGen } from "../../hooks/useKeyGen.ts";
 import Element from "../Element";
+import { idGenerator } from "../../utils";
 interface ICreateComponent {
 	info: InfoType;
 	current_component: InfoType | null;
@@ -12,7 +13,7 @@ const CreateComponent = ({
 	current_component,
 	removeComponent,
 }: ICreateComponent) => {
-	const randValue = useKeyGen().getKey(info);
+	const randValue = idGenerator().toString();
 	// console.log("current_component", current_component);
 	// console.log("info", info);
 	let html: JSX.Element = <></>;
@@ -137,6 +138,45 @@ const CreateComponent = ({
 						}}
 					></div>
 					<Element id={randValue} info={info} exId={`${randValue}t`} />
+					{current_component?.id === info.id && (
+						<div
+							onClick={() => removeComponent(info.id)}
+							className="px-3 py-2 bg-white absolute top-0 hidden group-hover:block cursor-pointer rounded-md"
+						>
+							<FaTrashAlt />
+						</div>
+					)}
+				</div>
+			);
+		}
+	}
+	if (info.name === InfoName.TEXT) {
+		if (removeComponent) {
+			html = (
+				<div
+					id={randValue}
+					onClick={() => info.setCurrentComponent(info)}
+					style={{
+						left: info.left + "px",
+						top: info.top + "px",
+						zIndex: info.z_index,
+						transform: info.rotate
+							? `rotate(${info.rotate}deg)`
+							: "rotate(0deg)",
+						padding: info.padding + "px",
+						color: info.color,
+						opacity: info.opacity,
+					}}
+					className="absolute group hover:border-[2px] hover:border-indigo-500"
+				>
+					<Element id={randValue} info={info} exId="" />
+					<h2
+						style={{ fontSize: info.font + "px", fontWeight: info.weight }}
+						className="w-full h-full"
+					>
+						{" "}
+						{info.title}{" "}
+					</h2>
 					{current_component?.id === info.id && (
 						<div
 							onClick={() => removeComponent(info.id)}

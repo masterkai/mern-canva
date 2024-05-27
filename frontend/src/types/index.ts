@@ -1,16 +1,20 @@
 export type InfoType = {
 	id: number;
 	name: InfoName;
-	type: ShapeType;
+	type: ShapeType | TaskType;
 	left: number;
 	top: number;
 	opacity: number;
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 	rotate: number;
 	z_index: number;
 	color: string;
 	image?: string;
+	title?: string;
+	padding?: number;
+	font?: number;
+	weight?: number;
 	moveElement: (id: string, info: InfoType) => void;
 	resizeElement: (exID: string, info: InfoType) => void;
 	rotateElement: (exID: string, info: InfoType) => void;
@@ -31,6 +35,7 @@ export enum TaskType {
 	PROJECT = "project",
 	INIT_IMAGE = "initImage",
 	BACKGROUND = "background",
+	TITLE = "title",
 }
 
 export enum InfoName {
