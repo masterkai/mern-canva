@@ -112,10 +112,12 @@ const Main = () => {
 			const index = components.findIndex((c) => c.id === current_component.id);
 			const temp = components.filter((c) => c.id !== current_component.id);
 
-			if (current_component.name === InfoName.MAIN_FRAME && image) {
-				components[index].image = image || current_component.image;
+			if (components[index]) {
+				if (current_component.name === InfoName.MAIN_FRAME && image) {
+					components[index].image = image || current_component.image;
+				}
+				components[index].color = color || current_component.color;
 			}
-			components[index].color = color || current_component.color;
 			setComponents([...temp, components[index]]);
 		}
 	}, [color, image]);
@@ -340,7 +342,7 @@ const Drawer_Box = ({
 					></div>
 					<div
 						onClick={() => createShape(InfoName.SHAPE, ShapeType.TRIANGLE)}
-						style={{ clipPath: "polygon(50% 0, 100% 100%, 0 100%" }}
+						style={{ clipPath: "polygon(50% 0, 100% 100%, 0 100%)" }}
 						className="h-[90px] bg-[#3c3c3d] cursor-pointer  "
 					></div>
 				</div>
