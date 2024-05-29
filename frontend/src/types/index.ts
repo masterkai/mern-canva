@@ -2,12 +2,12 @@ export type InfoType = {
 	id: number;
 	name: InfoName;
 	type: ShapeType | TaskType;
-	left: number;
-	top: number;
-	opacity: number;
+	left?: number;
+	top?: number;
+	opacity?: number;
 	width?: number;
 	height?: number;
-	rotate: number;
+	rotate?: number;
 	z_index: number;
 	color: string;
 	image?: string;
@@ -50,3 +50,22 @@ export enum InfoName {
 }
 
 export type ShowType = { name: InfoName | string; status: boolean };
+
+export interface MainState {
+	current_component: InfoType | null;
+	components: InfoType[];
+	image: string;
+	typeState: ShapeType | TaskType | null;
+	color: string;
+	rotate: number;
+	left: number;
+	top: number;
+	width: number;
+	height: number;
+	padding: number;
+	fontSize: number;
+	fontWeight: number;
+	text: string;
+	opacity: number;
+	show: ShowType;
+}

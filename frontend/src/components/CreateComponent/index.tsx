@@ -2,7 +2,6 @@ import { InfoName, InfoType, ShapeType } from "../../types";
 import { FaTrashAlt } from "react-icons/fa";
 import { useKeyGen } from "../../hooks/useKeyGen.ts";
 import Element from "../Element";
-import { idGenerator } from "../../utils";
 interface ICreateComponent {
 	info: InfoType;
 	current_component: InfoType | null;
@@ -13,7 +12,7 @@ const CreateComponent = ({
 	current_component,
 	removeComponent,
 }: ICreateComponent) => {
-	const randValue = idGenerator().toString();
+	const randValue = useKeyGen().getKey(info);
 	// console.log("current_component", current_component);
 	// console.log("info", info);
 	let html: JSX.Element = <></>;
@@ -21,7 +20,10 @@ const CreateComponent = ({
 	if (info.name === InfoName.MAIN_FRAME) {
 		html = (
 			<div
-				onClick={() => info.setCurrentComponent(info)}
+				onClick={() => {
+					console.log("info.id", info.id);
+					info.setCurrentComponent( info )
+				}}
 				className="hover:border-[2px] hover:border-indigo-500 shadow-md"
 				style={{
 					width: info.width + "px",
@@ -42,7 +44,10 @@ const CreateComponent = ({
 			html = (
 				<div
 					id={randValue.toString()}
-					onClick={() => info.setCurrentComponent(info)}
+					onClick={() => {
+						console.log("info.id", info.id);
+						info.setCurrentComponent( info )
+					}}
 					style={{
 						width: info.width + "px",
 						height: info.height + "px",
@@ -76,7 +81,10 @@ const CreateComponent = ({
 			html = (
 				<div
 					id={randValue}
-					onClick={() => info.setCurrentComponent(info)}
+					onClick={() => {
+						console.log("info.id", info.id);
+						info.setCurrentComponent( info )
+					}}
 					style={{
 						left: info.left + "px",
 						top: info.top + "px",
@@ -116,7 +124,10 @@ const CreateComponent = ({
 			html = (
 				<div
 					id={randValue}
-					onClick={() => info.setCurrentComponent(info)}
+					onClick={() => {
+						console.log("info.id", info.id);
+						info.setCurrentComponent( info )
+					}}
 					style={{
 						left: info.left + "px",
 						top: info.top + "px",
@@ -155,7 +166,10 @@ const CreateComponent = ({
 			html = (
 				<div
 					id={randValue}
-					onClick={() => info.setCurrentComponent(info)}
+					onClick={() => {
+						console.log("info.id", info.id);
+						info.setCurrentComponent( info )
+					}}
 					style={{
 						left: info.left + "px",
 						top: info.top + "px",

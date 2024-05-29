@@ -4,7 +4,7 @@ import { FaCloudUploadAlt, FaFolderOpen, FaShapes } from "react-icons/fa";
 import { FaTextHeight } from "react-icons/fa6";
 import { BsImages } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import TemplateDesign from "../components/main/TemplateDesign";
 import MyImages from "../components/MyImages";
@@ -15,65 +15,78 @@ import { idGenerator } from "../utils";
 import {
 	InfoName,
 	InfoType,
+	MainState,
 	ShapeType,
 	ShowType,
 	TaskType,
 } from "../types";
+import { useImmer } from "use-immer";
 
 const Main = () => {
-	const [image, setImage] = useState("");
-	const [current_component, setCurrentComponent] = useState<InfoType | null>(
-		null,
-	);
-	const [state, setState] = useState<ShapeType | TaskType | null>(null);
-	const [color, setColor] = useState("");
-	const [rotate, setRotate] = useState<number>(0);
-	const [left, setLeft] = useState<number | null>(0);
-	const [top, setTop] = useState<number | null>(null);
-	const [width, setWidth] = useState<number | null>(null);
-	const [height, setHeight] = useState<number | null>(null);
-
-	const [padding, setPadding] = useState("");
-	const [font, setFont] = useState("");
-	const [weight, setWeight] = useState("");
-	const [text, setText] = useState("");
-	const [opacity, setOpacity] = useState<number | null>(null);
-
-	const [show, setShow] = useState<ShowType>({
-		status: true,
-		name: "",
+	const opacityInputRef = useRef<HTMLInputElement>(null);
+	const [state, setState] = useImmer<MainState>({
+		current_component: null,
+		components: [
+			{
+				id: idGenerator(),
+				name: InfoName.MAIN_FRAME,
+				type: ShapeType.RECTANGLE,
+				height: 500,
+				width: 650,
+				z_index: 1,
+				color: "#fff",
+				image: "",
+				setCurrentComponent: (a: InfoType) => {
+					setState((draft) => {
+						draft.current_component = a;
+					});
+				},
+				moveElement,
+				resizeElement,
+				rotateElement,
+				left: 0,
+				top: 0,
+				opacity: 0,
+				rotate: 0,
+			},
+		],
+		image: "",
+		typeState: null,
+		color: "",
+		rotate: 0,
+		left: 0,
+		top: 0,
+		width: 0,
+		height: 0,
+		padding: 0,
+		fontSize: 0,
+		fontWeight: 0,
+		text: "",
+		opacity: 0,
+		show: { status: true, name: "" },
 	});
+	const {
+		typeState,
+		current_component,
+		components,
+		image,
+		color,
+		rotate,
+		left,
+		top,
+		width,
+		height,
+		opacity,
+		show,
+	} = state;
 
-	const setElements = (
-		type: SetStateAction<ShapeType | TaskType | null>,
-		name: InfoName,
-	) => {
-		setState(type);
-		setShow({
-			status: false,
-			name,
+	const setElements = (type: ShapeType | TaskType | null, name: InfoName) => {
+		setState((draft) => {
+			draft.typeState = type;
+			draft.show.name = name;
+			draft.show.status = false;
 		});
 	};
-	const [components, setComponents] = useState<InfoType[]>([
-		{
-			id: idGenerator(),
-			name: InfoName.MAIN_FRAME,
-			type: ShapeType.RECTANGLE,
-			height: 500,
-			width: 650,
-			z_index: 1,
-			color: "#fff",
-			image: "",
-			setCurrentComponent: (a: InfoType) => setCurrentComponent(a),
-			moveElement,
-			resizeElement,
-			rotateElement,
-			left: 0,
-			top: 0,
-			opacity: 0,
-			rotate: 0,
-		},
-	]);
 
 	const add_text = (name: InfoName, type: TaskType) => {
 		const style = {
@@ -90,19 +103,39 @@ const Main = () => {
 			title: "Add Your Text",
 			weight: 400,
 			color: "#3c3c3d",
-			setCurrentComponent: (a: InfoType) => setCurrentComponent(a),
+			setCurrentComponent: (a: InfoType) => {
+				setState((draft) => {
+					draft.current_component = a;
+				});
+			},
 			moveElement,
 			resizeElement,
 			rotateElement,
 		};
-		setWeight("");
-		setFont("");
-		setCurrentComponent(style);
-		setComponents([...components, style]);
+
+		setState((draft) => {
+			draft.components.push(style);
+			draft.current_component = style;
+			draft.fontWeight = 0;
+			draft.fontSize = 0;
+		});
 	};
+	function initializeCurrentComponent(currentInfo:InfoType) {
+		setState((draft) => {
+			draft.current_component = null;
+			draft.color = "";
+			draft.left = 0;
+			draft.top = 0;
+			draft.width = 0;
+			draft.height = 0;
+			draft.opacity = 0;
+			draft.rotate = 0;
+			draft.current_component = currentInfo;
+		});
+	}
 
 	function moveElement(id: string, currentInfo: InfoType) {
-		setCurrentComponent(currentInfo);
+		initializeCurrentComponent(currentInfo);
 		let isMoving = true;
 
 		const currentDiv = document.getElementById(id)!;
@@ -118,12 +151,14 @@ const Main = () => {
 		};
 
 		const mouseUp = (e: MouseEvent) => {
-			console.log(e);
+			e.preventDefault();
 			isMoving = false;
 			window.removeEventListener("mousemove", mouseMove);
 			window.removeEventListener("mouseup", mouseUp);
-			setLeft(parseInt(currentDiv.style.left));
-			setTop(parseInt(currentDiv.style.top));
+			setState((draft) => {
+				draft.left = parseInt(currentDiv.style.left);
+				draft.top = parseInt(currentDiv.style.top);
+			});
 		};
 
 		window.addEventListener("mousemove", mouseMove);
@@ -131,7 +166,7 @@ const Main = () => {
 	}
 
 	function resizeElement(id: string, currentInfo: InfoType) {
-		setCurrentComponent(currentInfo);
+		initializeCurrentComponent(currentInfo);
 		let isMoving = true;
 
 		const currentDiv = document.getElementById(id)!;
@@ -147,12 +182,14 @@ const Main = () => {
 		};
 
 		const mouseUp = (e: MouseEvent) => {
-			console.log(e);
+			e.preventDefault();
 			isMoving = false;
 			window.removeEventListener("mousemove", mouseMove);
 			window.removeEventListener("mouseup", mouseUp);
-			setWidth(parseInt(currentDiv.style.width));
-			setHeight(parseInt(currentDiv.style.height));
+			setState((draft) => {
+				draft.width = parseInt(currentDiv.style.width);
+				draft.height = parseInt(currentDiv.style.height);
+			});
 		};
 
 		window.addEventListener("mousemove", mouseMove);
@@ -160,8 +197,7 @@ const Main = () => {
 	}
 
 	function rotateElement(id: string, currentInfo: InfoType) {
-		setCurrentComponent(null);
-		setCurrentComponent(currentInfo);
+		initializeCurrentComponent(currentInfo);
 		const target = document.getElementById(id)!;
 
 		const mouseMove = ({ movementX }: MouseEvent) => {
@@ -181,8 +217,9 @@ const Main = () => {
 		};
 
 		const mouseUp = (e: MouseEvent) => {
-			window.removeEventListener("mousemove", ()=>mouseMove(e));
-			window.removeEventListener("mouseup", ()=>mouseUp(e));
+			e.preventDefault();
+			window.removeEventListener("mousemove", mouseMove);
+			window.removeEventListener("mouseup", mouseUp);
 
 			const getStyle = window.getComputedStyle(target);
 			const trans = getStyle.transform;
@@ -192,7 +229,10 @@ const Main = () => {
 			);
 
 			const deg = angle < 0 ? angle + 360 : angle;
-			setRotate(deg);
+			// setRotate(deg);
+			setState((draft) => {
+				draft.rotate = deg;
+			});
 		};
 
 		window.addEventListener("mousemove", mouseMove);
@@ -201,20 +241,20 @@ const Main = () => {
 
 	function removeComponent(id: number) {
 		const temp = components.filter((c) => c.id !== id);
-		setCurrentComponent(null);
-		setComponents(temp);
+		setState((draft) => {
+			draft.current_component = null;
+			draft.components = temp;
+		});
 	}
 
 	// remove_background function
 	const remove_background = () => {
 		if (current_component) {
-			const com = components.find((c) => c.id === current_component.id);
-			if (com) {
-				const temp = components.filter((c) => c.id !== current_component.id);
-				com.image = "";
-				setImage("");
-				setComponents([...temp, com]);
-			}
+			const index = components.findIndex((c) => c.id === current_component.id);
+			setState((draft) => {
+				draft.components[index].image = "";
+				draft.image = "";
+			})
 		}
 	};
 
@@ -227,53 +267,88 @@ const Main = () => {
 			top: 10,
 			opacity: 1,
 			width: 200,
-			height: 150,
+			height: 200,
 			rotate,
 			z_index: 2,
 			color: "#3c3c3d",
-			setCurrentComponent: (a: InfoType) => setCurrentComponent(a),
+			setCurrentComponent: (a: InfoType) => {
+				setState((draft) => {
+					draft.current_component = a;
+				});
+			},
 			moveElement,
 			resizeElement,
 			rotateElement,
 		};
-		setComponents([...components, style]);
+		setState((draft) => {
+			draft.components.push(style);
+			draft.current_component = style;
+		});
 	};
 
-	const opacityHandle = (e: ChangeEvent<HTMLInputElement>) => {
-		setOpacity(parseFloat(e.target.value));
+	const opacityHandle = () => {
+		if(opacityInputRef?.current){
+			setState((draft) => {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-expect-error
+				draft.opacity = parseFloat(opacityInputRef.current.value);
+			});
+		}
+
+
 	};
 
 	useEffect(() => {
 		if (current_component) {
 			const index = components.findIndex((c) => c.id === current_component.id);
-			const temp = components.filter((c) => c.id !== current_component.id);
+			// const temp = components.filter((c) => c.id !== current_component.id);
 
 			if (current_component.name !== InfoName.TEXT) {
-				components[index].width = width || current_component.width;
-				components[index].height = height || current_component.height;
-				components[index].rotate = rotate || current_component.rotate;
+				// components[index].width = width || current_component.width;
+				// components[index].height = height || current_component.height;
+				// components[index].rotate = rotate || current_component.rotate;
+				setState((draft) => {
+					draft.components[index].width = width || current_component.width;
+					draft.components[index].height = height || current_component.height;
+					draft.components[index].rotate = rotate || current_component.rotate;
+				});
 			}
 			if (current_component.name === InfoName.MAIN_FRAME && image) {
-				components[index].image = image || current_component.image;
+				setState((draft) => {
+					draft.components[index].image = image || current_component.image;
+				});
 			}
+
 			if (current_component.name !== InfoName.MAIN_FRAME) {
-				components[index].left = left || current_component.left;
-				components[index].top = top || current_component.top;
-				components[index].opacity = opacity || current_component.opacity;
+				// components[index].left = left || current_component.left;
+				// components[index].top = top || current_component.top;
+				// components[index].opacity = opacity || current_component.opacity;
+				setState((draft) => {
+					draft.components[index].left = left || current_component.left;
+					draft.components[index].top = top || current_component.top;
+					draft.components[index].opacity = opacity || current_component.opacity;
+				});
 			}
 
-			components[index].color = color || current_component.color;
 
-			setComponents([...temp, components[index]]);
-			setColor("");
-			setLeft(null);
-			setTop(null);
-			setWidth(null);
-			setHeight(null);
-			setOpacity(null);
-			setRotate(0);
+
+			setState((draft) => {
+				draft.components[index].color = color || current_component.color;
+			})
+			// setState((draft) => {
+			// 	draft.color = "";
+			// 	draft.left = 0;
+			// 	draft.top = 0;
+			// 	draft.width = 0;
+			// 	draft.height = 0;
+			// 	draft.opacity = 0;
+			// 	draft.rotate = 0;
+			// })
 		}
+
 	}, [color, image, left, top, width, height, opacity]);
+	// ui
+
 	return (
 		<div className="min-w-screen h-screen bg-black">
 			<Header_Design />
@@ -285,10 +360,19 @@ const Main = () => {
 					<Drawer_Box
 						addText={add_text}
 						createShape={createShape}
-						setImage={setImage}
-						state={state}
+						setImage={(image) => {
+							setState((draft) => {
+								draft.image = image;
+							})
+						}}
+						state={typeState}
 						show={show}
-						setShow={setShow}
+						setShow={
+							(show: { name: string; status: boolean }) =>
+								setState((draft) => {
+									draft.show = show;
+								})
+						}
 					/>
 
 					<div className="w-full flex justify-center h-full">
@@ -333,7 +417,11 @@ const Main = () => {
 											htmlFor="color"
 										></label>
 										<input
-											onChange={(e) => setColor(e.target.value)}
+											onChange={(e) => {
+												setState((draft) => {
+													draft.color = e.target.value;
+												});
+											}}
 											type="color"
 											className="invisible"
 											id="color"
@@ -353,13 +441,16 @@ const Main = () => {
 											<div className="flex gap-1 justify-start items-start">
 												<span className="text-md w-[70px]">Opacity</span>
 												<input
-													onChange={opacityHandle}
 													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
+													ref={opacityInputRef}
+													onChange={
+														opacityHandle
+													}
 													type="number"
 													step={0.1}
 													min={0.1}
 													max={1}
-													value={current_component.opacity}
+													value={opacity}
 												/>
 											</div>
 										</div>
@@ -377,7 +468,7 @@ const Main = () => {
 export default Main;
 type SideNavProps = {
 	setElements: (
-		type: SetStateAction<ShapeType | TaskType | null>,
+		type: ShapeType | TaskType | null,
 		name: InfoName,
 	) => void;
 	show: ShowType;
