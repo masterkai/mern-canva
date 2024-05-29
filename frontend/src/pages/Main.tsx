@@ -18,7 +18,6 @@ import {
 	ShapeType,
 	ShowType,
 	TaskType,
-	TextType,
 } from "../types";
 
 const Main = () => {
@@ -77,7 +76,7 @@ const Main = () => {
 	]);
 
 	const add_text = (name: InfoName, type: TaskType) => {
-		const style: TextType = {
+		const style = {
 			id: idGenerator(),
 			name: name,
 			type,
@@ -182,8 +181,8 @@ const Main = () => {
 		};
 
 		const mouseUp = (e: MouseEvent) => {
-			window.removeEventListener("mousemove", mouseMove);
-			window.removeEventListener("mouseup", mouseUp);
+			window.removeEventListener("mousemove", ()=>mouseMove(e));
+			window.removeEventListener("mouseup", ()=>mouseUp(e));
 
 			const getStyle = window.getComputedStyle(target);
 			const trans = getStyle.transform;
