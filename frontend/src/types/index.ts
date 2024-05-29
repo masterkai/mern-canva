@@ -65,6 +65,7 @@ export interface MainState {
 	padding: number;
 	fontSize: number;
 	fontWeight: number;
+	zIndex: number;
 	text: string;
 	opacity: number;
 	show: ShowType;

@@ -22,7 +22,7 @@ const CreateComponent = ({
 			<div
 				onClick={() => {
 					console.log("info.id", info.id);
-					info.setCurrentComponent( info )
+					info.setCurrentComponent(info);
 				}}
 				className="hover:border-[2px] hover:border-indigo-500 shadow-md"
 				style={{
@@ -46,7 +46,7 @@ const CreateComponent = ({
 					id={randValue.toString()}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent( info )
+						info.setCurrentComponent(info);
 					}}
 					style={{
 						width: info.width + "px",
@@ -83,7 +83,7 @@ const CreateComponent = ({
 					id={randValue}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent( info )
+						info.setCurrentComponent(info);
 					}}
 					style={{
 						left: info.left + "px",
@@ -126,7 +126,7 @@ const CreateComponent = ({
 					id={randValue}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent( info )
+						info.setCurrentComponent(info);
 					}}
 					style={{
 						left: info.left + "px",
@@ -168,7 +168,7 @@ const CreateComponent = ({
 					id={randValue}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent( info )
+						info.setCurrentComponent(info);
 					}}
 					style={{
 						left: info.left + "px",

@@ -24,6 +24,7 @@ import { useImmer } from "use-immer";
 
 const Main = () => {
 	const opacityInputRef = useRef<HTMLInputElement>(null);
+	const zIndexInputRef = useRef<HTMLInputElement>(null);
 	const [state, setState] = useImmer<MainState>({
 		current_component: null,
 		components: [
@@ -63,6 +64,7 @@ const Main = () => {
 		fontWeight: 0,
 		text: "",
 		opacity: 0,
+		zIndex: 0,
 		show: { status: true, name: "" },
 	});
 	const {
@@ -77,6 +79,7 @@ const Main = () => {
 		width,
 		height,
 		opacity,
+		zIndex,
 		show,
 	} = state;
 
@@ -120,7 +123,7 @@ const Main = () => {
 			draft.fontSize = 0;
 		});
 	};
-	function initializeCurrentComponent(currentInfo:InfoType) {
+	function initializeCurrentComponent(currentInfo: InfoType) {
 		setState((draft) => {
 			draft.current_component = null;
 			draft.color = "";
@@ -130,6 +133,7 @@ const Main = () => {
 			draft.height = 0;
 			draft.opacity = 0;
 			draft.rotate = 0;
+			draft.zIndex = 0;
 			draft.current_component = currentInfo;
 		});
 	}
@@ -254,7 +258,7 @@ const Main = () => {
 			setState((draft) => {
 				draft.components[index].image = "";
 				draft.image = "";
-			})
+			});
 		}
 	};
 
@@ -287,15 +291,13 @@ const Main = () => {
 	};
 
 	const opacityHandle = () => {
-		if(opacityInputRef?.current){
+		if (opacityInputRef?.current) {
 			setState((draft) => {
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-expect-error
 				draft.opacity = parseFloat(opacityInputRef.current.value);
 			});
 		}
-
-
 	};
 
 	useEffect(() => {
@@ -320,33 +322,20 @@ const Main = () => {
 			}
 
 			if (current_component.name !== InfoName.MAIN_FRAME) {
-				// components[index].left = left || current_component.left;
-				// components[index].top = top || current_component.top;
-				// components[index].opacity = opacity || current_component.opacity;
 				setState((draft) => {
 					draft.components[index].left = left || current_component.left;
 					draft.components[index].top = top || current_component.top;
-					draft.components[index].opacity = opacity || current_component.opacity;
+					draft.components[index].opacity =
+						opacity || current_component.opacity;
+					draft.components[index].z_index = zIndex || current_component.z_index;
 				});
 			}
 
-
-
 			setState((draft) => {
 				draft.components[index].color = color || current_component.color;
-			})
-			// setState((draft) => {
-			// 	draft.color = "";
-			// 	draft.left = 0;
-			// 	draft.top = 0;
-			// 	draft.width = 0;
-			// 	draft.height = 0;
-			// 	draft.opacity = 0;
-			// 	draft.rotate = 0;
-			// })
+			});
 		}
-
-	}, [color, image, left, top, width, height, opacity]);
+	}, [zIndex, color, image, left, top, width, height, opacity]);
 	// ui
 
 	return (
@@ -363,15 +352,14 @@ const Main = () => {
 						setImage={(image) => {
 							setState((draft) => {
 								draft.image = image;
-							})
+							});
 						}}
 						state={typeState}
 						show={show}
-						setShow={
-							(show: { name: string; status: boolean }) =>
-								setState((draft) => {
-									draft.show = show;
-								})
+						setShow={(show: { name: string; status: boolean }) =>
+							setState((draft) => {
+								draft.show = show;
+							})
 						}
 					/>
 
@@ -437,20 +425,33 @@ const Main = () => {
 											</div>
 										)}
 									{current_component.name !== InfoName.MAIN_FRAME && (
-										<div className="flex gap-6">
+										<div className="flex gap-6 flex-col">
 											<div className="flex gap-1 justify-start items-start">
 												<span className="text-md w-[70px]">Opacity</span>
 												<input
 													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
 													ref={opacityInputRef}
-													onChange={
-														opacityHandle
-													}
+													onChange={opacityHandle}
 													type="number"
 													step={0.1}
 													min={0.1}
 													max={1}
 													value={opacity}
+												/>
+											</div>
+											<div className="flex gap-1 justify-start items-start">
+												<span className="text-md w-[70px]">Z-Index</span>
+												<input
+													ref={zIndexInputRef}
+													onChange={(e) => {
+														setState((draft) => {
+															draft.zIndex = parseInt(e.target.value);
+														});
+													}}
+													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
+													type="number"
+													step={1}
+													value={zIndex}
 												/>
 											</div>
 										</div>
@@ -467,10 +468,7 @@ const Main = () => {
 
 export default Main;
 type SideNavProps = {
-	setElements: (
-		type: ShapeType | TaskType | null,
-		name: InfoName,
-	) => void;
+	setElements: (type: ShapeType | TaskType | null, name: InfoName) => void;
 	show: ShowType;
 };
 const SideNav = ({ setElements, show }: SideNavProps) => {
