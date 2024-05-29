@@ -9,12 +9,13 @@ export type InfoType = {
 	height?: number;
 	rotate?: number;
 	z_index: number;
-	color: string;
+	color?: string;
 	image?: string;
 	title?: string;
 	padding?: number;
-	font?: number;
-	weight?: number;
+	fontSize?: number;
+	fontWeight?: number;
+	radius?: number;
 	moveElement: (id: string, info: InfoType) => void;
 	resizeElement: (exID: string, info: InfoType) => void;
 	rotateElement: (exID: string, info: InfoType) => void;
@@ -46,6 +47,7 @@ export enum InfoName {
 	UPLOAD_IMAGE = "upload_image",
 	PROJECTS = "projects",
 	IMAGES = "images",
+	IMAGE = "image",
 	BACKGROUND = "background",
 }
 
@@ -68,5 +70,6 @@ export interface MainState {
 	zIndex: number;
 	text: string;
 	opacity: number;
+	radius?: number;
 	show: ShowType;
 }

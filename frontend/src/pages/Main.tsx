@@ -4,7 +4,7 @@ import { FaCloudUploadAlt, FaFolderOpen, FaShapes } from "react-icons/fa";
 import { FaTextHeight } from "react-icons/fa6";
 import { BsImages } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { useEffect, useRef } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import TemplateDesign from "../components/main/TemplateDesign";
 import MyImages from "../components/MyImages";
@@ -25,6 +25,9 @@ import { useImmer } from "use-immer";
 const Main = () => {
 	const opacityInputRef = useRef<HTMLInputElement>(null);
 	const zIndexInputRef = useRef<HTMLInputElement>(null);
+	const paddingInputRef = useRef<HTMLInputElement>(null);
+	const fontSizeInputRef = useRef<HTMLInputElement>(null);
+	const fontWeightInputRef = useRef<HTMLInputElement>(null);
 	const [state, setState] = useImmer<MainState>({
 		current_component: null,
 		components: [
@@ -63,6 +66,7 @@ const Main = () => {
 		fontSize: 0,
 		fontWeight: 0,
 		text: "",
+		radius: 0,
 		opacity: 0,
 		zIndex: 0,
 		show: { status: true, name: "" },
@@ -81,6 +85,11 @@ const Main = () => {
 		opacity,
 		zIndex,
 		show,
+		padding,
+		fontSize,
+		fontWeight,
+		text,
+		radius,
 	} = state;
 
 	const setElements = (type: ShapeType | TaskType | null, name: InfoName) => {
@@ -90,9 +99,44 @@ const Main = () => {
 			draft.show.status = false;
 		});
 	};
+	const add_image = (img: string) => {
+		setState((draft) => {
+			draft.current_component = null;
+		})
+		const style: InfoType = {
+			id: idGenerator(),
+			name: InfoName.IMAGE,
+			type: TaskType.IMAGE,
+			left: 10,
+			top: 10,
+			opacity: 1,
+			width: 200,
+			height: 150,
+			rotate,
+			z_index: 2,
+			radius: 0,
+			image: img,
+			setCurrentComponent: (a:InfoType) => {
+				setState((draft) => {
+					draft.current_component = a;
+				});
+
+			},
+			moveElement,
+			resizeElement,
+			rotateElement
+		}
+		setState((draft) => {
+			draft.components.push(style);
+			draft.current_component = style;
+		});
+	}
 
 	const add_text = (name: InfoName, type: TaskType) => {
-		const style = {
+		setState((draft) => {
+			draft.current_component = null;
+		})
+		const style: InfoType = {
 			id: idGenerator(),
 			name: name,
 			type,
@@ -102,9 +146,9 @@ const Main = () => {
 			rotate,
 			z_index: 10,
 			padding: 6,
-			font: 22,
+			fontSize: 22,
 			title: "Add Your Text",
-			weight: 400,
+			fontWeight: 400,
 			color: "#3c3c3d",
 			setCurrentComponent: (a: InfoType) => {
 				setState((draft) => {
@@ -134,6 +178,11 @@ const Main = () => {
 			draft.opacity = 0;
 			draft.rotate = 0;
 			draft.zIndex = 0;
+			draft.padding = 0;
+			draft.fontSize = 0;
+			draft.fontWeight = 0;
+			draft.text = "";
+			draft.radius = 0;
 			draft.current_component = currentInfo;
 		});
 	}
@@ -290,14 +339,11 @@ const Main = () => {
 		});
 	};
 
-	const opacityHandle = () => {
-		if (opacityInputRef?.current) {
-			setState((draft) => {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-expect-error
-				draft.opacity = parseFloat(opacityInputRef.current.value);
-			});
-		}
+	const opacityHandle = (e:ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		setState((draft) => {
+			draft.opacity = parseFloat(opacityInputRef.current!.value);
+		});
 	};
 
 	useEffect(() => {
@@ -306,13 +352,24 @@ const Main = () => {
 			// const temp = components.filter((c) => c.id !== current_component.id);
 
 			if (current_component.name !== InfoName.TEXT) {
-				// components[index].width = width || current_component.width;
-				// components[index].height = height || current_component.height;
-				// components[index].rotate = rotate || current_component.rotate;
 				setState((draft) => {
 					draft.components[index].width = width || current_component.width;
 					draft.components[index].height = height || current_component.height;
 					draft.components[index].rotate = rotate || current_component.rotate;
+				});
+			}
+			if (current_component.name === "text") {
+				// components[index].fontSize = fontSize || current_component.fontSize
+				// components[index].padding = padding || current_component.padding
+				// components[index].fontWeight = fontWeight || current_component.fontWeight
+				setState((draft) => {
+					draft.components[index].fontSize =
+						fontSize || current_component.fontSize;
+					draft.components[index].padding =
+						padding || current_component.padding;
+					draft.components[index].fontWeight =
+						fontWeight || current_component.fontWeight;
+					draft.components[index].title = text || current_component.title;
 				});
 			}
 			if (current_component.name === InfoName.MAIN_FRAME && image) {
@@ -335,9 +392,22 @@ const Main = () => {
 				draft.components[index].color = color || current_component.color;
 			});
 		}
-	}, [zIndex, color, image, left, top, width, height, opacity]);
-	// ui
+	}, [
+		zIndex,
+		color,
+		image,
+		left,
+		top,
+		width,
+		height,
+		opacity,
+		fontWeight,
+		padding,
+		fontSize,
+		text,
+	]);
 
+	// ui
 	return (
 		<div className="min-w-screen h-screen bg-black">
 			<Header_Design />
@@ -347,6 +417,7 @@ const Main = () => {
 
 				<div className="h-full w-[calc(100%-75px)]">
 					<Drawer_Box
+						addImage={add_image}
 						addText={add_text}
 						createShape={createShape}
 						setImage={(image) => {
@@ -444,8 +515,9 @@ const Main = () => {
 												<input
 													ref={zIndexInputRef}
 													onChange={(e) => {
+														e.preventDefault();
 														setState((draft) => {
-															draft.zIndex = parseInt(e.target.value);
+															draft.zIndex = parseInt(zIndexInputRef.current!.value);
 														});
 													}}
 													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
@@ -455,6 +527,84 @@ const Main = () => {
 												/>
 											</div>
 										</div>
+									)}
+									{current_component.name === InfoName.TEXT && (
+										<>
+											<div className="flex gap-1 justify-start items-start">
+												<span className="text-md w-[70px]">Padding : </span>
+												<input
+													ref={paddingInputRef}
+													onChange={(e) => {
+														setState((draft) => {
+															draft.padding = parseInt(e.target.value);
+														});
+													}}
+													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
+													type="number"
+													step={1}
+													value={padding}
+												/>
+											</div>
+
+											<div className="flex gap-1 justify-start items-start">
+												<span className="text-md w-[70px]">Font Size</span>
+												<input
+													ref={fontSizeInputRef}
+													onChange={(e) => {
+														setState((draft) => {
+															draft.fontSize = parseInt(e.target.value);
+														});
+													}}
+													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
+													type="number"
+													step={1}
+													value={fontSize}
+												/>
+											</div>
+
+											<div className="flex gap-1 justify-start items-start">
+												<span className="text-md w-[70px]">Weight : </span>
+												<input
+													ref={fontWeightInputRef}
+													onChange={(e) => {
+														setState((draft) => {
+															draft.fontWeight = parseInt(e.target.value);
+														});
+													}}
+													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
+													type="number"
+													step={100}
+													min={100}
+													max={900}
+													value={fontWeight}
+												/>
+											</div>
+
+											<div className="flex gap-2 flex-col justify-start items-start">
+												<input
+													onChange={(e) => {
+														setState((draft) => {
+															if (draft.current_component) {
+																draft.current_component.title = e.target.value;
+															}
+														});
+													}}
+													className="border border-gray-700 bg-transparent outline-none p-2 rounded-md"
+													type="text"
+													value={current_component.title}
+												/>
+												<button
+													onClick={() => {
+														setState((draft) => {
+															draft.text = current_component.title || "";
+														});
+													}}
+													className="px-4 py-2 bg-purple-500 text-xs text-white rounded-sm"
+												>
+													Add Text
+												</button>
+											</div>
+										</>
 									)}
 								</div>
 							</div>
@@ -568,6 +718,7 @@ type DrawerBoxProps = {
 	setImage: (image: string) => void;
 	createShape: (name: InfoName, type: ShapeType) => void;
 	addText: (name: InfoName, type: TaskType) => void;
+	addImage: (img: string) => void;
 };
 const Drawer_Box = ({
 	state,
@@ -576,6 +727,7 @@ const Drawer_Box = ({
 	setImage,
 	createShape,
 	addText,
+	addImage,
 }: DrawerBoxProps) => {
 	return (
 		<div
@@ -625,7 +777,7 @@ const Drawer_Box = ({
 			{state === TaskType.PROJECT && <Projects />}
 			{state === TaskType.INIT_IMAGE && (
 				<div className="h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide">
-					<Image />
+					<Image add_image={addImage} />
 				</div>
 			)}
 			{state === TaskType.BACKGROUND && (
