@@ -28,6 +28,7 @@ const Main = () => {
 	const paddingInputRef = useRef<HTMLInputElement>(null);
 	const fontSizeInputRef = useRef<HTMLInputElement>(null);
 	const fontWeightInputRef = useRef<HTMLInputElement>(null);
+	const radiusInputRef = useRef<HTMLInputElement>(null);
 	const [state, setState] = useImmer<MainState>({
 		current_component: null,
 		components: [
@@ -102,7 +103,7 @@ const Main = () => {
 	const add_image = (img: string) => {
 		setState((draft) => {
 			draft.current_component = null;
-		})
+		});
 		const style: InfoType = {
 			id: idGenerator(),
 			name: InfoName.IMAGE,
@@ -116,26 +117,25 @@ const Main = () => {
 			z_index: 2,
 			radius: 0,
 			image: img,
-			setCurrentComponent: (a:InfoType) => {
+			setCurrentComponent: (a: InfoType) => {
 				setState((draft) => {
 					draft.current_component = a;
 				});
-
 			},
 			moveElement,
 			resizeElement,
-			rotateElement
-		}
+			rotateElement,
+		};
 		setState((draft) => {
 			draft.components.push(style);
 			draft.current_component = style;
 		});
-	}
+	};
 
 	const add_text = (name: InfoName, type: TaskType) => {
 		setState((draft) => {
 			draft.current_component = null;
-		})
+		});
 		const style: InfoType = {
 			id: idGenerator(),
 			name: name,
@@ -339,7 +339,7 @@ const Main = () => {
 		});
 	};
 
-	const opacityHandle = (e:ChangeEvent<HTMLInputElement>) => {
+	const opacityHandle = (e: ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		setState((draft) => {
 			draft.opacity = parseFloat(opacityInputRef.current!.value);
@@ -358,10 +358,7 @@ const Main = () => {
 					draft.components[index].rotate = rotate || current_component.rotate;
 				});
 			}
-			if (current_component.name === "text") {
-				// components[index].fontSize = fontSize || current_component.fontSize
-				// components[index].padding = padding || current_component.padding
-				// components[index].fontWeight = fontWeight || current_component.fontWeight
+			if (current_component.name === InfoName.TEXT) {
 				setState((draft) => {
 					draft.components[index].fontSize =
 						fontSize || current_component.fontSize;
@@ -372,6 +369,12 @@ const Main = () => {
 					draft.components[index].title = text || current_component.title;
 				});
 			}
+			if (current_component.name === InfoName.IMAGE) {
+				setState((draft) => {
+					draft.components[index].radius = radius || current_component.radius;
+				});
+			}
+
 			if (current_component.name === InfoName.MAIN_FRAME && image) {
 				setState((draft) => {
 					draft.components[index].image = image || current_component.image;
@@ -405,6 +408,7 @@ const Main = () => {
 		padding,
 		fontSize,
 		text,
+		radius,
 	]);
 
 	// ui
@@ -517,7 +521,9 @@ const Main = () => {
 													onChange={(e) => {
 														e.preventDefault();
 														setState((draft) => {
-															draft.zIndex = parseInt(zIndexInputRef.current!.value);
+															draft.zIndex = parseInt(
+																zIndexInputRef.current!.value,
+															);
 														});
 													}}
 													className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
@@ -526,6 +532,26 @@ const Main = () => {
 													value={zIndex}
 												/>
 											</div>
+										</div>
+									)}
+									{current_component.name === InfoName.IMAGE && (
+										<div className="flex gap-1 justify-start items-start">
+											<span className="text-md w-[70px]">Radius</span>
+											<input
+												ref={radiusInputRef}
+												onChange={(e) => {
+													e.preventDefault();
+													setState((draft) => {
+														draft.radius = parseInt(
+															radiusInputRef.current!.value,
+														);
+													});
+												}}
+												className="w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md"
+												type="number"
+												step={1}
+												value={radius}
+											/>
 										</div>
 									)}
 									{current_component.name === InfoName.TEXT && (
