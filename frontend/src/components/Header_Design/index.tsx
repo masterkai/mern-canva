@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
 import * as htmlToImage from "html-to-image";
+import { useMainContext } from "../../context/MainProvide.tsx";
+import { useState } from "react";
+import api from "../../utils/api.ts";
+import { AxiosError } from "axios";
 const Header = () => {
+	const {
+		state: { components },
+		design_id,
+	} = useMainContext();
+	const [loader, setLoader] = useState(false);
 	const downloadImage = async () => {
 		const getDiv = document.getElementById("main_design")!;
 		const dataUrl = await htmlToImage.toPng(getDiv, {
@@ -16,6 +25,36 @@ const Header = () => {
 		link.click();
 		document.body.removeChild(link);
 	};
+
+	const saveImage = async () => {
+		const getDiv = document.getElementById("main_design")!;
+		const image = await htmlToImage.toBlob(getDiv);
+
+		if (image) {
+			const obj = {
+				design: components,
+			};
+			console.log(obj);
+
+			const formData = new FormData();
+			formData.append("design", JSON.stringify(obj));
+			formData.append("image", image);
+			try {
+				setLoader(true);
+				const { data } = await api.put(
+					`/api/update-user-design/${design_id}`,
+					formData,
+				);
+
+				setLoader(false);
+			} catch (error) {
+				setLoader(false);
+				const err = error as AxiosError;
+				console.log(err.response?.data);
+			}
+		}
+	};
+
 	return (
 		<div className="h-[60px] bg-gradient-to-r from-[#212122] via-[#27282b] to-[#2a2b2c] w-full">
 			<div className="flex justify-between px-10 items-center text-gray-400 h-full">
@@ -28,9 +67,13 @@ const Header = () => {
 				<span className="text-xl">Easy Canva</span>
 
 				<div className="flex justify-center items-center gap-2 text-gray-200">
-					<button className="px-3 py-[6px] outline-none bg-[#7482f6] rounded-md">
+					<button
+						disabled={loader}
+						onClick={saveImage}
+						className="px-3 py-[6px] outline-none bg-[#7482f6] rounded-md"
+					>
 						{" "}
-						Save{" "}
+						{loader ? "Loading.." : "Save"}
 					</button>
 					<button
 						onClick={downloadImage}

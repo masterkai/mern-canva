@@ -459,6 +459,7 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 		fontSizeInputRef,
 		fontWeightInputRef,
 		radiusInputRef,
+		design_id,
 	};
 
 	return <MainContext.Provider value={value}>{children}</MainContext.Provider>;

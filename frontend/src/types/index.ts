@@ -96,6 +96,7 @@ export interface IMainContext {
 	fontSizeInputRef: React.RefObject<HTMLInputElement>;
 	fontWeightInputRef: React.RefObject<HTMLInputElement>;
 	radiusInputRef: React.RefObject<HTMLInputElement>;
+	design_id: string | undefined;
 }
 
 export type UserDataType = {
