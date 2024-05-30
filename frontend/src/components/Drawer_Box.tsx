@@ -5,6 +5,8 @@ import MyImages from "./MyImages";
 import Projects from "./Projects";
 import Image from "./Image";
 import { useMainContext } from "../context/MainProvide.tsx";
+import BackgroundImages from "./BackgroundImages.tsx";
+import InitialImage from "./InitialImage.tsx";
 
 const Drawer_Box = () => {
 	const {
@@ -67,30 +69,12 @@ const Drawer_Box = () => {
 			{typeState === TaskType.PROJECT && <Projects />}
 			{typeState === TaskType.INIT_IMAGE && (
 				<div className="h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide">
-					<Image add_image={add_image} />
+					<InitialImage />
 				</div>
 			)}
 			{typeState === TaskType.BACKGROUND && (
 				<div className="h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide">
-					<div className="grid grid-cols-2 gap-2">
-						{[1, 2, 3, 4, 5, 6].map((img, i) => (
-							<div
-								onClick={() => {
-									setState((draft) => {
-										draft.image = "http://localhost:5173/canva.png";
-									});
-								}}
-								key={i}
-								className="w-full h-[90px] overflow-hidden rounded-sm cursor-pointer"
-							>
-								<img
-									className="w-full h-full object-fill"
-									src="http://localhost:5173/canva.png"
-									alt=""
-								/>
-							</div>
-						))}
-					</div>
+					<BackgroundImages />
 				</div>
 			)}
 		</div>

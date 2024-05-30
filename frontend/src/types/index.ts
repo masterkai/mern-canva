@@ -115,4 +115,4 @@ export type AuthDataType = {
 export type UserImageType = {
 	user_id: string;
 	image_url: string;
-}
+};
