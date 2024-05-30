@@ -1,3 +1,6 @@
+import { Updater } from "use-immer";
+import React, { ChangeEvent } from "react";
+
 export type InfoType = {
 	id: number;
 	name: InfoName;
@@ -72,4 +75,25 @@ export interface MainState {
 	opacity: number;
 	radius?: number;
 	show: ShowType;
+}
+
+export interface IMainContext {
+	state: MainState;
+	setState: Updater<MainState>;
+	setElements: (type: ShapeType | TaskType | null, name: InfoName) => void;
+	add_image: (img: string) => void;
+	add_text: (name: InfoName, type: TaskType) => void;
+	moveElement: (id: string, currentInfo: InfoType) => void;
+	resizeElement: (id: string, currentInfo: InfoType) => void;
+	rotateElement: (id: string, currentInfo: InfoType) => void;
+	removeComponent: (id: number) => void;
+	createShape: (name: InfoName, type: ShapeType) => void;
+	opacityHandle: (e: ChangeEvent<HTMLInputElement>) => void;
+	remove_background: () => void;
+	opacityInputRef: React.RefObject<HTMLInputElement>;
+	zIndexInputRef: React.RefObject<HTMLInputElement>;
+	paddingInputRef: React.RefObject<HTMLInputElement>;
+	fontSizeInputRef: React.RefObject<HTMLInputElement>;
+	fontWeightInputRef: React.RefObject<HTMLInputElement>;
+	radiusInputRef: React.RefObject<HTMLInputElement>;
 }
