@@ -16,12 +16,16 @@ import {
 } from "../types";
 import { useImmer } from "use-immer";
 import { idGenerator } from "../utils";
+import { useParams } from "react-router-dom";
+import api from "../utils/api.ts";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 export const MainContext = createContext<IMainContext>(null);
 
 const MainProvider = ({ children }: { children: React.ReactNode }) => {
+	const { design_id } = useParams();
+
 	const opacityInputRef = useRef<HTMLInputElement>(null);
 	const zIndexInputRef = useRef<HTMLInputElement>(null);
 	const paddingInputRef = useRef<HTMLInputElement>(null);
@@ -408,6 +412,34 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 		text,
 		radius,
 	]);
+
+	useEffect(() => {
+		const get_design = async () => {
+			try {
+				const { data } = await api.get(`/api/user-design/${design_id}`);
+				console.log(data);
+				const { design } = data;
+				for (let i = 0; i < design.length; i++) {
+					design[i].setCurrentComponent = (a: InfoType) => {
+						setState((draft) => {
+							draft.current_component = a;
+						});
+					};
+					design[i].moveElement = moveElement;
+					design[i].resizeElement = resizeElement;
+					design[i].rotateElement = rotateElement;
+					design[i].remove_background = remove_background;
+				}
+				setState((draft) => {
+					draft.components = design;
+				});
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		get_design();
+	}, [design_id]);
+
 	const value = {
 		state,
 		setState,

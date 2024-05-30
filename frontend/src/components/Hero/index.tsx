@@ -1,8 +1,7 @@
-type HeroProps = {
-	setType: (show: string) => void;
-	setShow: (show: boolean) => void;
-};
-const Hero = ({ setType, setShow }: HeroProps) => {
+import { useAuthContext } from "../../pages";
+
+const Hero = () => {
+	const { setState } = useAuthContext();
 	return (
 		<div className="w-full h-full justify-center items-center p-4">
 			<div className="py-[170px] flex justify-center items-center flex-col gap-6">
@@ -14,8 +13,12 @@ const Hero = ({ setType, setShow }: HeroProps) => {
 				</span>
 				<button
 					onClick={() => {
-						setType("signup");
-						setShow(true);
+						// setType("signup");
+						// setShow(true);
+						setState((draft) => {
+							draft.isShow = true;
+							draft.registerType = "signup";
+						});
 					}}
 					className="py-2 w-[200px] text-center bg-purple-700 text-white transition-all hover:bg-purple-500 rounded-[5px] font-medium"
 				>

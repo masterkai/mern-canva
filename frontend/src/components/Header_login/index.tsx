@@ -1,9 +1,7 @@
-type HeaderProps = {
-	setShow: (show: boolean) => void;
-	setType: (type: "signin" | "signup" | string) => void;
-};
+import { useAuthContext } from "../../pages";
 
-const Header = ({ setShow, setType }: HeaderProps) => {
+const Header = () => {
+	const { setState } = useAuthContext();
 	return (
 		<div className="bg-[#212223] shadow-md">
 			<div className="w-[93%] m-auto py-3">
@@ -18,8 +16,10 @@ const Header = ({ setShow, setType }: HeaderProps) => {
 					<div className="flex gap-4">
 						<button
 							onClick={() => {
-								setShow(true);
-								setType("signin");
+								setState((draft) => {
+									draft.isShow = true;
+									draft.registerType = "signin";
+								});
 							}}
 							className="py-2 w-[80px] text-center bg-teal-700 text-white transition-all hover:bg-teal-500 rounded-[5px] font-medium"
 						>
@@ -27,8 +27,10 @@ const Header = ({ setShow, setType }: HeaderProps) => {
 						</button>
 						<button
 							onClick={() => {
-								setShow(true);
-								setType("signup");
+								setState((draft) => {
+									draft.isShow = true;
+									draft.registerType = "signup";
+								});
 							}}
 							className="py-2 w-[80px] text-center bg-purple-700 text-white transition-all hover:bg-purple-500 rounded-[5px] font-medium"
 						>

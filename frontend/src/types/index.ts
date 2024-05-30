@@ -19,10 +19,10 @@ export type InfoType = {
 	fontSize?: number;
 	fontWeight?: number;
 	radius?: number;
-	moveElement: (id: string, info: InfoType) => void;
-	resizeElement: (exID: string, info: InfoType) => void;
-	rotateElement: (exID: string, info: InfoType) => void;
-	setCurrentComponent: (a: InfoType) => void;
+	moveElement?: (id: string, info: InfoType) => void;
+	resizeElement?: (exID: string, info: InfoType) => void;
+	rotateElement?: (exID: string, info: InfoType) => void;
+	setCurrentComponent?: (a: InfoType) => void;
 };
 
 export enum ShapeType {
@@ -97,3 +97,16 @@ export interface IMainContext {
 	fontWeightInputRef: React.RefObject<HTMLInputElement>;
 	radiusInputRef: React.RefObject<HTMLInputElement>;
 }
+
+export type UserDataType = {
+	name: string;
+	email: string;
+	password: string;
+};
+
+export type AuthDataType = {
+	registerType: "signin" | "signup" | string;
+	userDATA: UserDataType;
+	isShow: boolean;
+	loading: boolean;
+};

@@ -2,16 +2,14 @@ import { InfoName, InfoType, ShapeType } from "../../types";
 import { FaTrashAlt } from "react-icons/fa";
 import { useKeyGen } from "../../hooks/useKeyGen.ts";
 import Element from "../Element";
+import { useMainContext } from "../../context/MainProvide.tsx";
 interface ICreateComponent {
 	info: InfoType;
 	current_component: InfoType | null;
 	removeComponent?: (id: number) => void;
 }
-const CreateComponent = ({
-	info,
-	current_component,
-	removeComponent,
-}: ICreateComponent) => {
+const CreateComponent = ({ info, current_component }: ICreateComponent) => {
+	const { setState, removeComponent } = useMainContext();
 	const randValue = useKeyGen().getKey(info);
 	// console.log("current_component", current_component);
 	// console.log("info", info);
@@ -22,7 +20,9 @@ const CreateComponent = ({
 			<div
 				onClick={() => {
 					console.log("info.id", info.id);
-					info.setCurrentComponent(info);
+					setState((draft) => {
+						draft.current_component = info;
+					});
 				}}
 				className="hover:border-[2px] hover:border-indigo-500 shadow-md"
 				style={{
@@ -46,7 +46,9 @@ const CreateComponent = ({
 					id={randValue.toString()}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent(info);
+						setState((draft) => {
+							draft.current_component = info;
+						});
 					}}
 					style={{
 						width: info.width + "px",
@@ -83,7 +85,9 @@ const CreateComponent = ({
 					id={randValue}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent(info);
+						setState((draft) => {
+							draft.current_component = info;
+						});
 					}}
 					style={{
 						left: info.left + "px",
@@ -126,7 +130,9 @@ const CreateComponent = ({
 					id={randValue}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent(info);
+						setState((draft) => {
+							draft.current_component = info;
+						});
 					}}
 					style={{
 						left: info.left + "px",
@@ -168,7 +174,9 @@ const CreateComponent = ({
 					id={randValue}
 					onClick={() => {
 						console.log("info.id", info.id);
-						info.setCurrentComponent(info);
+						setState((draft) => {
+							draft.current_component = info;
+						});
 					}}
 					style={{
 						left: info.left + "px",
@@ -211,7 +219,11 @@ const CreateComponent = ({
 			html = (
 				<div
 					id={randValue}
-					onClick={() => info.setCurrentComponent(info)}
+					onClick={() => {
+						setState((draft) => {
+							draft.current_component = info;
+						});
+					}}
 					style={{
 						left: info.left + "px",
 						top: info.top + "px",

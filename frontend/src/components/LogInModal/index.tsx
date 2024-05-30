@@ -1,37 +1,31 @@
 import { RxCross2 } from "react-icons/rx";
 import { BiLogoGmail } from "react-icons/bi";
 import { FaFacebook } from "react-icons/fa";
-import { ChangeEvent } from "react";
+import { useAuthContext } from "../../pages";
 
-type LogInModalProps = {
-	show: boolean;
-	setShow: (show: boolean) => void;
-	type: "signin" | "signup" | string;
-	inputHandle: (e: ChangeEvent<HTMLInputElement>) => void;
-	state: {
-		name: string;
-		email: string;
-		password: string;
-	};
-};
-
-const LogInModal = ({
-	show,
-	setShow,
-	inputHandle,
-	state,
-	type,
-}: LogInModalProps) => {
-	const displayStr = type === "signin" ? "Login" : "Sign up";
+const LogInModal = () => {
+	const {
+		state: { isShow, registerType, userDATA, loading },
+		inputHandle,
+		user_register,
+		user_login,
+		setState,
+	} = useAuthContext();
+	const displayStr = registerType === "signin" ? "Login" : "Sign up";
+	const signInOrUo = registerType === "signin" ? user_login : user_register;
 	return (
 		<div
 			className={`w-screen ${
-				show ? "visible opacity-100" : "invisible opacity-30"
+				isShow ? "visible opacity-100" : "invisible opacity-30"
 			} transition-all duration-500 h-screen fixed bg-[#252627ad] flex justify-center items-center `}
 		>
 			<div className="w-[350px] bg-[#323335] m-auto px-6 py-4 rounded-md relative">
 				<div
-					onClick={() => setShow(false)}
+					onClick={() =>
+						setState((draft) => {
+							draft.isShow = false;
+						})
+					}
 					className="absolute right-4 top-4 text-xl cursor-pointer text-white"
 				>
 					<RxCross2 />
@@ -39,8 +33,9 @@ const LogInModal = ({
 				<h2 className="text-white pb-4 text-center text-xl">
 					{displayStr} in seconds
 				</h2>
-				<form>
-					{type === "signup" && (
+				{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+				<form onSubmit={signInOrUo}>
+					{registerType === "signup" && (
 						<div className="flex flex-col gap-3 mb-3 text-white">
 							<label htmlFor="name">Name</label>
 							<input
@@ -49,7 +44,7 @@ const LogInModal = ({
 								name="name"
 								id="name"
 								placeholder="name"
-								value={state.name}
+								value={userDATA.name}
 								className="px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent"
 							/>
 						</div>
@@ -62,7 +57,7 @@ const LogInModal = ({
 							name="email"
 							id="email"
 							placeholder="email"
-							value={state.email}
+							value={userDATA.email}
 							className="px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent"
 						/>
 					</div>
@@ -75,14 +70,17 @@ const LogInModal = ({
 							name="password"
 							id="password"
 							placeholder="password"
-							value={state.password}
+							value={userDATA.password}
 							className="px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent"
 						/>
 					</div>
 
 					<div>
-						<button className="px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white">
-							{displayStr}
+						<button
+							disabled={loading}
+							className="px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white"
+						>
+							{loading ? "loading..." : displayStr}
 						</button>
 					</div>
 
