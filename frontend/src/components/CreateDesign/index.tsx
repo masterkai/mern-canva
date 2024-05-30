@@ -7,6 +7,7 @@ import RotateLoader from "react-spinners/RotateLoader";
 import { InfoName, ShapeType } from "../../types";
 import api from "../../utils/api.ts";
 import { AxiosError } from "axios";
+import MainProvider from "../../context/MainProvide.tsx";
 
 const CreateDesign = () => {
 	const ref = useRef(null);
@@ -57,16 +58,18 @@ const CreateDesign = () => {
 	}, [state, ref]);
 
 	return (
-		<div className="w-screen h-screen flex justify-center items-center relative">
-			<div ref={ref} className="relative w-auto h-auto overflow-auto">
-				<CreateComponent info={infoData} current_component={null} />
-			</div>
-			{loader && (
-				<div className="left-0 top-0 w-full h-full flex justify-center items-center bg-black absolute">
-					<RotateLoader color="white" />
+		<MainProvider>
+			<div className="w-screen h-screen flex justify-center items-center relative">
+				<div ref={ ref } className="relative w-auto h-auto overflow-auto">
+					<CreateComponent info={ infoData } current_component={ null }/>
 				</div>
-			)}
-		</div>
+				{ loader && (
+					<div className="left-0 top-0 w-full h-full flex justify-center items-center bg-black absolute">
+						<RotateLoader color="white"/>
+					</div>
+				) }
+			</div>
+		</MainProvider>
 	);
 };
 
