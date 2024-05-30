@@ -4,6 +4,8 @@ import { useMainContext } from "../../context/MainProvide.tsx";
 import { useState } from "react";
 import api from "../../utils/api.ts";
 import { AxiosError } from "axios";
+import toast from "react-hot-toast";
+
 const Header = () => {
 	const {
 		state: { components },
@@ -45,12 +47,15 @@ const Header = () => {
 					`/api/update-user-design/${design_id}`,
 					formData,
 				);
-
+				toast.success(data.message);
 				setLoader(false);
 			} catch (error) {
 				setLoader(false);
 				const err = error as AxiosError;
-				console.log(err.response?.data);
+				// console.log(err.response?.data);
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-expect-error
+				toast.error(err.response.data.message);
 			}
 		}
 	};
