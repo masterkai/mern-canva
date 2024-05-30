@@ -111,3 +111,8 @@ export type AuthDataType = {
 	isShow: boolean;
 	loading: boolean;
 };
+
+export type UserImageType = {
+	user_id: string;
+	image_url: string;
+}

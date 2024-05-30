@@ -1,22 +1,18 @@
 const { model, Schema } = require("mongoose");
 
-const user_schema = new Schema(
+const user_image_schema = new Schema(
 	{
 		user_id: {
 			type: Schema.Types.ObjectId,
 			required: true,
 			ref: "users",
 		},
-		components: {
-			type: Array,
-			default: [],
-		},
 		image_url: {
 			type: String,
-			default: "",
+			required: true,
 		},
 	},
 	{ timestamps: true },
 );
 
-module.exports = model("designs", user_schema);
+module.exports = model("user_images", user_image_schema);
