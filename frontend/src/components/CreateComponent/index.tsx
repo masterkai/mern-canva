@@ -230,7 +230,7 @@ const CreateComponent = ({
 						style={{
 							width: info.width + "px",
 							height: info.height + "px",
-							borderRadius: `${info.radius}%`,
+							borderRadius: `${info.radius}px`,
 						}}
 					>
 						<img className="w-full h-full" src={info.image} alt="image" />
