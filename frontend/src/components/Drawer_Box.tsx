@@ -3,7 +3,6 @@ import { InfoName, ShapeType, TaskType } from "../types";
 import TemplateDesign from "./main/TemplateDesign.tsx";
 import MyImages from "./MyImages";
 import Projects from "./Projects";
-import Image from "./Image";
 import { useMainContext } from "../context/MainProvide.tsx";
 import BackgroundImages from "./BackgroundImages.tsx";
 import InitialImage from "./InitialImage.tsx";
@@ -14,7 +13,6 @@ const Drawer_Box = () => {
 		createShape,
 		setState,
 		add_text,
-		add_image,
 	} = useMainContext();
 
 	return (
