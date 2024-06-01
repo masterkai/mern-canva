@@ -60,14 +60,14 @@ const CreateDesign = () => {
 	return (
 		<MainProvider>
 			<div className="w-screen h-screen flex justify-center items-center relative">
-				<div ref={ref} className="relative w-auto h-auto overflow-auto">
-					<CreateComponent info={infoData} current_component={null} />
+				<div ref={ ref } className="relative w-auto h-auto overflow-auto">
+					<CreateComponent info={ infoData } current_component={ null }/>
 				</div>
-				{loader && (
+				{ loader && (
 					<div className="left-0 top-0 w-full h-full flex justify-center items-center bg-black absolute">
-						<RotateLoader color="white" />
+						<RotateLoader color="white"/>
 					</div>
-				)}
+				) }
 			</div>
 		</MainProvider>
 	);

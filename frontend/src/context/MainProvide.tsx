@@ -370,7 +370,6 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 				draft.components[index].width = width || current_component.width;
 				draft.components[index].height = height || current_component.height;
 			});
-
 		}
 	}, [
 		image,
@@ -404,27 +403,27 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		if (current_component) {
-			const index = components.findIndex( (c) => c.id === current_component.id );
-			setState( (draft) => {
+			const index = components.findIndex((c) => c.id === current_component.id);
+			setState((draft) => {
 				draft.components[index].rotate = rotate || current_component.rotate;
-			} );
+			});
 		}
 	}, [rotate]);
 	useEffect(() => {
 		if (current_component) {
-			const index = components.findIndex( (c) => c.id === current_component.id );
-			setState( (draft) => {
+			const index = components.findIndex((c) => c.id === current_component.id);
+			setState((draft) => {
 				draft.components[index].color = color || current_component.color;
-			} );
+			});
 		}
 	}, [color]);
 
 	useEffect(() => {
 		if (current_component) {
-			const index = components.findIndex( (c) => c.id === current_component.id );
-			setState( (draft) => {
+			const index = components.findIndex((c) => c.id === current_component.id);
+			setState((draft) => {
 				draft.components[index].z_index = zIndex || current_component.z_index;
-			} );
+			});
 		}
 	}, [zIndex]);
 

@@ -64,7 +64,7 @@ const Drawer_Box = () => {
 					</div>
 				</div>
 			)}
-			{typeState === TaskType.PROJECT && <Projects />}
+			{typeState === TaskType.PROJECT && <Projects type="main" />}
 			{typeState === TaskType.INIT_IMAGE && (
 				<div className="h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide">
 					<InitialImage />

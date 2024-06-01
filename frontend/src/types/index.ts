@@ -36,6 +36,7 @@ export enum TaskType {
 	INIT_IMAGE = "initImage",
 	BACKGROUND = "background",
 	TITLE = "title",
+	MAIN = "main",
 }
 
 export enum InfoName {

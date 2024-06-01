@@ -7,6 +7,7 @@ import Templates from "./components/Templates";
 import CreateDesign from "./components/CreateDesign";
 import Main from "./pages/Main.tsx";
 import { token_decode } from "./utils";
+import MainProvider from "./context/MainProvide.tsx";
 
 const userInfo = token_decode(localStorage.getItem("canva_token"));
 function App() {
@@ -16,7 +17,7 @@ function App() {
 			element: userInfo ? <Layout /> : <Index />,
 			children: [
 				{ path: "/", element: <Home /> },
-				{ path: "/projects", element: <Projects /> },
+				{ path: "/projects", element: <MainProvider><Projects/></MainProvider> },
 				{ path: "/templates", element: <Templates /> },
 			],
 		},
@@ -30,7 +31,11 @@ function App() {
 		},
 	]);
 
-	return <RouterProvider router={router} />;
+	return (
+
+			<RouterProvider router={router} />
+
+	);
 }
 
 export default App;

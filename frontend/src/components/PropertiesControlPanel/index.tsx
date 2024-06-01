@@ -4,7 +4,6 @@ import CreateComponent from "../CreateComponent";
 import { useEffect, useState } from "react";
 
 const PropertiesControlPanel = () => {
-
 	const {
 		state: {
 			current_component,
@@ -33,8 +32,7 @@ const PropertiesControlPanel = () => {
 		if (current_component?.title) {
 			setCurrentText(current_component.title);
 		}
-	}
-	, [current_component]);
+	}, [current_component]);
 	return (
 		<div className="w-full flex justify-center h-full">
 			<div

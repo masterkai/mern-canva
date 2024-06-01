@@ -1,16 +1,16 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Link, useNavigate } from "react-router-dom";
-import { FaTrashAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import api from "../../utils/api.ts";
 import { DesignType } from "../../types";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { AxiosError } from "axios";
+import Item from "../Item";
 
 const Home = () => {
 	const navigate = useNavigate();
-	const [designs, setDesigns] = useState<DesignType[]>([])
+	const [designs, setDesigns] = useState<DesignType[]>([]);
 	const [show, setShow] = useState(false);
 	const [state, setState] = useState({
 		width: 0,
@@ -56,27 +56,27 @@ const Home = () => {
 
 	const get_user_design = async () => {
 		try {
-			const {data} = await api.get('/api/user-designs')
-			setDesigns(data.designs)
+			const { data } = await api.get("/api/user-designs");
+			setDesigns(data.designs);
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 		}
-	}
+	};
 
 	const delete_design = async (design_id: string) => {
 		try {
-			const { data } = await api.put(`/api/delete-user-design/${design_id}`)
-			toast.success(data.message)
-			get_user_design()
+			const { data } = await api.put(`/api/delete-user-design/${design_id}`);
+			toast.success(data.message);
+			get_user_design();
 		} catch (error) {
-			const err = error as AxiosError<{message: string}>
-			toast.error(err.response!.data.message)
+			const err = error as AxiosError<{ message: string }>;
+			toast.error(err.response!.data.message);
 		}
-	}
+	};
 
 	useEffect(() => {
-		get_user_design()
-	},[])
+		get_user_design();
+	}, []);
 
 	return (
 		<div className="pt-1 pl-3">
@@ -109,12 +109,8 @@ const Home = () => {
 						responsive={responsive}
 						transitionDuration={500}
 					>
-						{designs.map((d,i) => (
-							<Item
-								key={i}
-								design={d}
-								delete_design={delete_design}
-							/>
+						{designs.map((d, i) => (
+							<Item key={i} design={d} delete_design={delete_design} />
 						))}
 					</Carousel>
 				</div>
@@ -124,28 +120,6 @@ const Home = () => {
 };
 
 export default Home;
-
-interface DesignProps {
-	design:DesignType;
-	delete_design:(design_id: string) => Promise<void>;
-}
-const Item = (props: DesignProps) => {
-	const {design, delete_design } = props
-	return (
-		<div className="relative group w-full h-[170px] px-2">
-			<Link to={`design/${design._id}/edit`} className="w-full h-full block bg-slate-100 p-4 rounded-md">
-				<img
-					className="w-full h-full rounded-md overflow-hidden"
-					src={design.image_url}
-					alt=""
-				/>
-			</Link>
-			<div onClick={() => delete_design(design._id)} className="absolute hidden cursor-pointer top-1 right-2 text-red-500 p-2 transition-all duration-500 group-hover:block">
-				<FaTrashAlt />
-			</div>
-		</div>
-	);
-};
 
 type SizeSettingProps = {
 	inputHandler: (e: ChangeEvent<HTMLInputElement>) => void;
