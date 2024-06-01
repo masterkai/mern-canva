@@ -22,7 +22,7 @@ const Item = (props: DesignProps) => {
 				} `}
 			>
 				<img
-					className="w-full h-full rounded-md overflow-hidden"
+					className="w-full h-full rounded-md overflow-hidden object-cover"
 					src={design.image_url}
 					alt=""
 				/>
