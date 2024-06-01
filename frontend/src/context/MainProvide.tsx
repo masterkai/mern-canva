@@ -329,12 +329,12 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 			const index = components.findIndex((c) => c.id === current_component.id);
 			// const temp = components.filter((c) => c.id !== current_component.id);
 
-			if (current_component.name !== InfoName.TEXT) {
-				setState((draft) => {
-					draft.components[index].width = width || current_component.width;
-					draft.components[index].height = height || current_component.height;
-				});
-			}
+			// if (current_component.name !== InfoName.TEXT) {
+			// 	setState((draft) => {
+			// 		draft.components[index].width = width || current_component.width;
+			// 		draft.components[index].height = height || current_component.height;
+			// 	});
+			// }
 			if (current_component.name === InfoName.TEXT) {
 				setState((draft) => {
 					draft.components[index].fontSize =
@@ -366,6 +366,10 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 						opacity || current_component.opacity;
 				});
 			}
+			setState((draft) => {
+				draft.components[index].width = width || current_component.width;
+				draft.components[index].height = height || current_component.height;
+			});
 
 		}
 	}, [

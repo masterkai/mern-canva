@@ -112,3 +112,9 @@ export type UserImageType = {
 	user_id: string;
 	image_url: string;
 };
+
+export type DesignType = {
+	_id: string;
+	components: InfoType[];
+	image_url: string;
+};
