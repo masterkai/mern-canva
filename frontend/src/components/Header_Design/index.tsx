@@ -29,6 +29,7 @@ const Header = () => {
 	};
 
 	const saveImage = async () => {
+		console.log("saveImage", components);
 		const getDiv = document.getElementById("main_design")!;
 		const image = await htmlToImage.toBlob(getDiv);
 

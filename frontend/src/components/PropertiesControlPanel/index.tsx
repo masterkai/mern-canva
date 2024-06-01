@@ -1,8 +1,10 @@
 import { InfoName, InfoType } from "../../types";
 import { useMainContext } from "../../context/MainProvide.tsx";
 import CreateComponent from "../CreateComponent";
+import { useEffect, useState } from "react";
 
 const PropertiesControlPanel = () => {
+
 	const {
 		state: {
 			current_component,
@@ -25,6 +27,14 @@ const PropertiesControlPanel = () => {
 		fontSizeInputRef,
 		fontWeightInputRef,
 	} = useMainContext();
+	const [currentText, setCurrentText] = useState("");
+
+	useEffect(() => {
+		if (current_component?.title) {
+			setCurrentText(current_component.title);
+		}
+	}
+	, [current_component]);
 	return (
 		<div className="w-full flex justify-center h-full">
 			<div
@@ -68,7 +78,7 @@ const PropertiesControlPanel = () => {
 							<input
 								onChange={(e) => {
 									setState((draft) => {
-                                        draft.current_component = current_component;
+										draft.current_component = current_component;
 										draft.color = e.target.value;
 									});
 								}}
@@ -198,21 +208,19 @@ const PropertiesControlPanel = () => {
 									<input
 										onChange={(e) => {
 											setState((draft) => {
-												if (draft.current_component) {
-													draft.current_component = current_component;
-													draft.current_component.title = e.target.value;
-												}
+												draft.current_component = current_component;
+												setCurrentText(e.target.value);
 											});
 										}}
 										className="border border-gray-700 bg-transparent outline-none p-2 rounded-md"
 										type="text"
-										value={current_component.title}
+										value={currentText}
 									/>
 									<button
 										onClick={() => {
 											setState((draft) => {
 												draft.current_component = current_component;
-												draft.text = current_component.title || "";
+												draft.text = currentText || "";
 											});
 										}}
 										className="px-4 py-2 bg-purple-500 text-xs text-white rounded-sm"

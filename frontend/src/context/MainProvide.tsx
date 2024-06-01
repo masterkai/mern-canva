@@ -44,14 +44,6 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 				z_index: 1,
 				color: "#fff",
 				image: "",
-				setCurrentComponent: (a: InfoType) => {
-					setState((draft) => {
-						draft.current_component = a;
-					});
-				},
-				moveElement,
-				resizeElement,
-				rotateElement,
 				left: 0,
 				top: 0,
 				opacity: 0,
@@ -119,14 +111,6 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 			z_index: 2,
 			radius: 0,
 			image: img,
-			setCurrentComponent: (a: InfoType) => {
-				setState((draft) => {
-					draft.current_component = a;
-				});
-			},
-			moveElement,
-			resizeElement,
-			rotateElement,
 		};
 		setState((draft) => {
 			draft.components.push(style);
@@ -152,14 +136,6 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 			title: "Add Your Text",
 			fontWeight: 400,
 			color: "#3c3c3d",
-			setCurrentComponent: (a: InfoType) => {
-				setState((draft) => {
-					draft.current_component = a;
-				});
-			},
-			moveElement,
-			resizeElement,
-			rotateElement,
 		};
 
 		setState((draft) => {
@@ -394,6 +370,7 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 			}
 
 			setState((draft) => {
+				draft.components[index].rotate = rotate || current_component.rotate;
 				draft.components[index].color = color || current_component.color;
 			});
 		}
@@ -419,17 +396,6 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 				const { data } = await api.get(`/api/user-design/${design_id}`);
 				console.log(data);
 				const { design } = data;
-				for (let i = 0; i < design.length; i++) {
-					design[i].setCurrentComponent = (a: InfoType) => {
-						setState((draft) => {
-							draft.current_component = a;
-						});
-					};
-					design[i].moveElement = moveElement;
-					design[i].resizeElement = resizeElement;
-					design[i].rotateElement = rotateElement;
-					design[i].remove_background = remove_background;
-				}
 				setState((draft) => {
 					draft.components = design;
 				});
@@ -439,6 +405,15 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 		};
 		get_design();
 	}, [design_id]);
+
+	useEffect(() => {
+		if (current_component) {
+			const index = components.findIndex( (c) => c.id === current_component.id );
+			setState( (draft) => {
+				draft.components[index].rotate = rotate || current_component.rotate;
+			} );
+		}
+	}, [rotate]);
 
 	const value = {
 		state,
