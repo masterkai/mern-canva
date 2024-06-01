@@ -68,6 +68,7 @@ const PropertiesControlPanel = () => {
 							<input
 								onChange={(e) => {
 									setState((draft) => {
+                                        draft.current_component = current_component;
 										draft.color = e.target.value;
 									});
 								}}
@@ -107,6 +108,7 @@ const PropertiesControlPanel = () => {
 										onChange={(e) => {
 											e.preventDefault();
 											setState((draft) => {
+												draft.current_component = current_component;
 												draft.zIndex = parseInt(zIndexInputRef.current!.value);
 											});
 										}}
@@ -126,6 +128,7 @@ const PropertiesControlPanel = () => {
 									onChange={(e) => {
 										e.preventDefault();
 										setState((draft) => {
+											draft.current_component = current_component;
 											draft.radius = parseInt(radiusInputRef.current!.value);
 										});
 									}}
@@ -144,6 +147,7 @@ const PropertiesControlPanel = () => {
 										ref={paddingInputRef}
 										onChange={(e) => {
 											setState((draft) => {
+												draft.current_component = current_component;
 												draft.padding = parseInt(e.target.value);
 											});
 										}}
@@ -160,6 +164,7 @@ const PropertiesControlPanel = () => {
 										ref={fontSizeInputRef}
 										onChange={(e) => {
 											setState((draft) => {
+												draft.current_component = current_component;
 												draft.fontSize = parseInt(e.target.value);
 											});
 										}}
@@ -176,6 +181,7 @@ const PropertiesControlPanel = () => {
 										ref={fontWeightInputRef}
 										onChange={(e) => {
 											setState((draft) => {
+												draft.current_component = current_component;
 												draft.fontWeight = parseInt(e.target.value);
 											});
 										}}
@@ -193,6 +199,7 @@ const PropertiesControlPanel = () => {
 										onChange={(e) => {
 											setState((draft) => {
 												if (draft.current_component) {
+													draft.current_component = current_component;
 													draft.current_component.title = e.target.value;
 												}
 											});
@@ -204,6 +211,7 @@ const PropertiesControlPanel = () => {
 									<button
 										onClick={() => {
 											setState((draft) => {
+												draft.current_component = current_component;
 												draft.text = current_component.title || "";
 											});
 										}}
