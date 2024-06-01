@@ -333,7 +333,6 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 				setState((draft) => {
 					draft.components[index].width = width || current_component.width;
 					draft.components[index].height = height || current_component.height;
-					draft.components[index].rotate = rotate || current_component.rotate;
 				});
 			}
 			if (current_component.name === InfoName.TEXT) {
@@ -365,18 +364,11 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 					draft.components[index].top = top || current_component.top;
 					draft.components[index].opacity =
 						opacity || current_component.opacity;
-					draft.components[index].z_index = zIndex || current_component.z_index;
 				});
 			}
 
-			setState((draft) => {
-				draft.components[index].rotate = rotate || current_component.rotate;
-				draft.components[index].color = color || current_component.color;
-			});
 		}
 	}, [
-		zIndex,
-		color,
 		image,
 		left,
 		top,
@@ -414,6 +406,23 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 			} );
 		}
 	}, [rotate]);
+	useEffect(() => {
+		if (current_component) {
+			const index = components.findIndex( (c) => c.id === current_component.id );
+			setState( (draft) => {
+				draft.components[index].color = color || current_component.color;
+			} );
+		}
+	}, [color]);
+
+	useEffect(() => {
+		if (current_component) {
+			const index = components.findIndex( (c) => c.id === current_component.id );
+			setState( (draft) => {
+				draft.components[index].z_index = zIndex || current_component.z_index;
+			} );
+		}
+	}, [zIndex]);
 
 	const value = {
 		state,
