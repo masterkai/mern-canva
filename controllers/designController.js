@@ -8,6 +8,10 @@ const backgroundImageModel = require('../models/backgroundImageModel')
 const {mongo: { ObjectId } } = require('mongoose')
 
 class designController {
+	// convert http to https function
+	convert_http_to_https = (url) => {
+		return url.replace("http://", "https://");
+	}
 	create_user_design = async (req, res) => {
 		const form = formidable({});
 		const { _id } = req.userInfo;
@@ -24,7 +28,7 @@ class designController {
 			const design = await designModel.create({
 				user_id: _id,
 				components: [JSON.parse(fields.design[0])],
-				image_url: url,
+				image_url: this.convert_http_to_https(url)
 			});
 			return res.status(200).json({ design });
 		} catch (error) {
@@ -70,7 +74,7 @@ class designController {
 				const { url } = await cloudinary.uploader.upload(image[0].filepath, {secure: true});
 
 				await designModel.findByIdAndUpdate(design_id, {
-					image_url: url,
+					image_url: this.convert_http_to_https(url),
 					components,
 				});
 
@@ -101,7 +105,7 @@ class designController {
 
 			const userImage = await userImageModel.create({
 				user_id: _id,
-				image_url: url,
+				image_url: this.convert_http_to_https(url),
 			});
 			return res.status(201).json({ userImage });
 		} catch (error) {
