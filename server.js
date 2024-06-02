@@ -11,12 +11,15 @@ if (process.env.NODE_ENV === "local") {
 	app.use(
 		cors({
 			origin: "http://localhost:5173",
+			methods: ["GET", "POST", "PUT", "DELETE"],
 			credentials: true,
 		}),
 	);
 } else {
 	app.use(
 		cors({
+			origin:["https://mern-canva-bay.vercel.app/"],
+			methods: ["GET", "POST", "PUT", "DELETE"],
 			credentials: true,
 		}),
 	);
