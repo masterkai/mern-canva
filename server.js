@@ -18,8 +18,6 @@ if (process.env.NODE_ENV === "local") {
 } else {
 	app.use(
 		cors({
-			origin:["https://mern-canva-bay.vercel.app"],
-			methods: ["GET", "POST", "PUT", "DELETE"],
 			credentials: true,
 		}),
 	);
