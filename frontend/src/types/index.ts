@@ -102,6 +102,14 @@ export type UserDataType = {
 	password: string;
 };
 
+export interface JWT_USER_INFO {
+	name: string;
+	email: string;
+	_id: string;
+	iat: number;
+	exp: number;
+}
+
 export type AuthDataType = {
 	registerType: "signin" | "signup" | string;
 	userDATA: UserDataType;

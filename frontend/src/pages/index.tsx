@@ -7,6 +7,7 @@ import { AuthDataType, UserDataType } from "../types";
 import api from "../utils/api";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface IndexContextProps {
 	state: AuthDataType;
@@ -69,8 +70,10 @@ const Index = () => {
 			setState((draft) => {
 				draft.loading = false;
 			});
-			const err = error as AxiosError;
-			console.log(err.response?.data);
+			const err = error as AxiosError<{ message: string }>;
+			if (err.response?.data!.message) {
+				toast(err.response?.data!.message);
+			}
 		}
 	};
 
@@ -104,8 +107,10 @@ const Index = () => {
 			setState((draft) => {
 				draft.loading = false;
 			});
-			const err = error as AxiosError;
-			console.log(err.response?.data);
+			const err = error as AxiosError<{ message: string }>;
+			if (err.response?.data!.message) {
+				toast(err.response?.data!.message);
+			}
 		}
 	};
 	//end method

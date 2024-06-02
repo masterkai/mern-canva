@@ -110,7 +110,7 @@ const Home = () => {
 						transitionDuration={500}
 					>
 						{designs.map((d, i) => (
-							<Item key={i} design={d} delete_design={delete_design} type="design" />
+							<Item key={i} design={d} delete_design={delete_design} type="" />
 						))}
 					</Carousel>
 				</div>

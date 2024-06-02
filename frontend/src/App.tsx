@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+	createBrowserRouter,
+	Navigate,
+	RouterProvider,
+} from "react-router-dom";
 import Index from "./pages";
 import Layout from "./pages/Layout.tsx";
 import Home from "./components/Home";
@@ -30,15 +34,15 @@ function App() {
 		},
 		{
 			path: "/design/create",
-			element: <CreateDesign />,
+			element: userInfo ? <CreateDesign /> : <Navigate to="/" />,
 		},
 		{
 			path: "/design/:design_id/edit",
-			element: <Main />,
+			element: userInfo ? <Main /> : <Navigate to="/" />,
 		},
 		{
 			path: "projects/design/:design_id/edit",
-			element: <Main />,
+			element: userInfo ? <Main /> : <Navigate to="/" />,
 		},
 	]);
 

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaFolderOpen, FaHome } from "react-icons/fa";
 import { LuLayoutTemplate } from "react-icons/lu";
+import { token_decode } from "../utils";
+import { JWT_USER_INFO } from "../types";
 
+const userInfo = token_decode(localStorage.getItem("canva_token"));
 const Layout = () => {
 	const navigate = useNavigate();
 
@@ -47,7 +50,11 @@ const Sidebar = () => {
 					alt="image"
 				/>
 				<div className="flex justify-center flex-col items-start">
-					<span className="text-[#e0dddd] font-bold text-md">Kazi Ariyan</span>
+					<span className="text-[#e0dddd] font-bold text-md">
+						{(userInfo as JWT_USER_INFO).name
+							? (userInfo as JWT_USER_INFO).name
+							: "somebody"}
+					</span>
 					<span className="text-[#e0dddd] text-sm">Free</span>
 				</div>
 			</div>
@@ -145,6 +152,11 @@ const Navbar = ({ setShow, show, create }: NavbarProps) => {
 };
 
 const Profile = () => {
+	const logout = () => {
+		localStorage.removeItem("canva_token");
+		window.location.href = "/";
+	};
+
 	return (
 		<div className="absolute top-[60px] right-0 w-[250px] bg-[#313030] p-3 border border-gray-700">
 			<div className="px-2 py-2 flex justify-start gap-5 items-center">
@@ -154,9 +166,9 @@ const Profile = () => {
 					alt=""
 				/>
 				<div className="flex justify-center flex-col items-start">
-					<span className="text-[#e0dddd] font-bold text-md">Ariyan</span>
+					<span className="text-[#e0dddd] font-bold text-md">{ (userInfo as JWT_USER_INFO).name?(userInfo as JWT_USER_INFO).name:"somebody" }</span>
 					<span className="text-[#e0dddd] font-bold text-md">
-						ariyan@gmail.com
+						{ (userInfo as JWT_USER_INFO).email?(userInfo as JWT_USER_INFO).email:"somebody" }
 					</span>
 				</div>
 			</div>
@@ -168,9 +180,9 @@ const Profile = () => {
 					</Link>
 				</li>
 				<li>
-					<Link to={""} className="p-2 cursor-pointer">
+					<div onClick={logout} className="p-2 cursor-pointer">
 						<span>Logout </span>
-					</Link>
+					</div>
 				</li>
 			</ul>
 		</div>
