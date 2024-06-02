@@ -3,6 +3,7 @@ const cloudinary = require("cloudinary").v2;
 const designModel = require("../models/designModel");
 const userImageModel = require("../models/userImageModel");
 const designImageModel = require('../models/designImageModel')
+const templateModel = require('../models/templateModel')
 const backgroundImageModel = require('../models/backgroundImageModel')
 const {mongo: { ObjectId } } = require('mongoose')
 
@@ -163,6 +164,33 @@ class designController {
 		} catch (error) {
 			return res.status(500).json({ message: error.message })
 		}
+	}
+// End Method
+	get_templates = async (req, res) => {
+		try {
+			const templates = await templateModel.find({}).sort({ createdAt: -1 })
+			return res.status(200).json({ templates })
+		} catch (error) {
+			return res.status(500).json({ message: error.message })
+		}
+	}
+// End Method
+	add_user_template = async (req,res) => {
+		const { template_id } = req.params
+		const { _id } = req.userInfo
+
+		try {
+			const template = await templateModel.findById(template_id)
+			const design = await designModel.create({
+				user_id:_id,
+				components: template.components,
+				image_url: template.image_url
+			})
+			return res.status(200).json({ design })
+		} catch (error) {
+			return res.status(500).json({ message: error.message })
+		}
+
 	}
 // End Method
 }

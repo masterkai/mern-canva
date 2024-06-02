@@ -9,14 +9,14 @@ const Main = () => {
 	return (
 		<MainProvider>
 			<div className="min-w-screen h-screen bg-black">
-				<Header_Design/>
+				<Header_Design />
 
 				<div className="flex h-[calc(100%-60px)] w-screen">
-					<SideNav/>
+					<SideNav />
 
 					<div className="h-full w-[calc(100%-75px)]">
-						<Drawer_Box/>
-						<PropertiesControlPanel/>
+						<Drawer_Box />
+						<PropertiesControlPanel />
 					</div>
 				</div>
 			</div>

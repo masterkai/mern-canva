@@ -17,7 +17,14 @@ function App() {
 			element: userInfo ? <Layout /> : <Index />,
 			children: [
 				{ path: "/", element: <Home /> },
-				{ path: "/projects", element: <MainProvider><Projects/></MainProvider> },
+				{
+					path: "/projects",
+					element: (
+						<MainProvider>
+							<Projects />
+						</MainProvider>
+					),
+				},
 				{ path: "/templates", element: <Templates /> },
 			],
 		},
@@ -29,13 +36,13 @@ function App() {
 			path: "/design/:design_id/edit",
 			element: <Main />,
 		},
+		{
+			path: "projects/design/:design_id/edit",
+			element: <Main />,
+		},
 	]);
 
-	return (
-
-			<RouterProvider router={router} />
-
-	);
+	return <RouterProvider router={router} />;
 }
 
 export default App;

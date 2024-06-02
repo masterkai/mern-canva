@@ -32,7 +32,7 @@ const Drawer_Box = () => {
 				<MdKeyboardArrowLeft />
 			</div>
 			{typeState === TaskType.DESIGN && (
-				<div className="grid grid-cols-2 gap-2">
+				<div>
 					<TemplateDesign type="main" />
 				</div>
 			)}
