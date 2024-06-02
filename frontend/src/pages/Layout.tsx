@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaFolderOpen, FaHome } from "react-icons/fa";
 import { LuLayoutTemplate } from "react-icons/lu";
 
 const Layout = () => {
+	const navigate = useNavigate();
+
+	const create = () => {
+		navigate("/design/create", {
+			state: {
+				type: "create",
+				width: 750,
+				height: 500,
+			},
+		});
+	};
 	const [show, setShow] = useState(false);
 
 	return (
 		<div className="bg-[#18191b] min-h-screen w-full ">
-			<Navbar setShow={setShow} show={show} />
+			<Navbar create={create} setShow={setShow} show={show} />
 
 			<div className="w-full flex mt-16">
 				<Sidebar />
@@ -91,9 +102,10 @@ const Sidebar = () => {
 type NavbarProps = {
 	show: boolean;
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
+	create: () => void;
 };
 
-const Navbar = ({ setShow, show }: NavbarProps) => {
+const Navbar = ({ setShow, show, create }: NavbarProps) => {
 	return (
 		<div className="bg-[#212223] shadow-md fixed left-0 top-0 w-full z-20">
 			<div className="w-[93%] m-auto py-3">
@@ -107,7 +119,10 @@ const Navbar = ({ setShow, show }: NavbarProps) => {
 					</div>
 
 					<div className="flex gap-4 justify-center items-center relative">
-						<button className="py-2 px-2 overflow-hidden text-center bg-[#8b3dff] text-white rounded-[3px] font-medium">
+						<button
+							onClick={create}
+							className="py-2 px-2 overflow-hidden text-center bg-[#8b3dff] text-white rounded-[3px] font-medium"
+						>
 							Create a Design
 						</button>
 						<div
